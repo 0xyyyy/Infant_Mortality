@@ -40,7 +40,7 @@ D3 interactive scatter plot:
 
 sketch:
 
-![sketch](/Resources/proposal_images/sketch.png)
+![sketch](/Resources/proposal_images/sketch.PNG)
 
 Link to github:
 
