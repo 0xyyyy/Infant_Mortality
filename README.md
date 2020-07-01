@@ -38,6 +38,9 @@ D3 interactive scatter plot:
 
 ![InteractiveScatter](/Resources/proposal_images/d3_interactive_scatter_plot.png)
 
+sketch:
+
+![sketch](/Resources/proposal_images/sketch.png)
 
 Link to github:
 
