@@ -1,0 +1,35 @@
+body {
+    background-color: black;
+}
+
+.parent {
+  width: 100%;
+  border: 2px solid grey;
+  float: left;
+  padding: 6px;
+}
+
+.child {
+  width: 90%;
+  padding: 20%;
+  border: 1px solid grey;
+  margin: 0.5em auto;
+}
+
+.twins {
+  width: 50%;
+  padding: 1em;
+  border: 1px solid grey;
+  float: left;
+}
+
+h3 {
+    font-size: x-large;
+    font-weight: bold;
+    color: palegoldenrod;
+}
+
+h4 {
+    font-size: small;
+    color: grey
+}
