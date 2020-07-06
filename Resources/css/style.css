@@ -33,22 +33,30 @@ body {
 h3 {
     font-size: x-large;
     font-weight: bold;
-    color: palegoldenrod;
-}
-
-h4 {
-    font-size: small;
-    color: grey;
+    color: rgb(158, 158, 141);
 }
 
 h5 {
   font-size: x-small;
-font-weight: bold;
-color: dimgrey;
+  font-weight: bold;
+  color: dimgrey;
+}
+
+p {
+    font-size: small;
+    color: grey;
+}
+
+.navbar-brand {
+  padding: 0em;
+  border: 0px;
+  margin: 0em;
 
 }
 
-img {
+.main-img {
   width: 100%;
   height: auto;
 }
+
+
