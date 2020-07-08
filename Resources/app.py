@@ -1,11 +1,12 @@
 # import dependencies 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import numpy as np
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-import pandas as pd 
+import pandas as pd
+
 
 
 engine = create_engine("sqlite:///db2.sqlite")
@@ -32,14 +33,14 @@ app = Flask(__name__)
 # Define what to do when users hits the index route
 @app.route("/")
 def home():
-    return (
-        f"Available Routes:<br>"
-        f"/api/v1.0/infants<br>"
-        f"/api/v1.0/birthweight<br>"
-        f"/api/v1.0/teen<br>"
-        f"/api/v1.0/unmarried<br>"
-        f"/api/v1.0/medianincome<br>"
-    )
+    return render_template('index.html')
+        # f"Available Routes:<br>"
+        # f"/api/v1.0/infants<br>"
+        # f"/api/v1.0/birthweight<br>"
+        # f"/api/v1.0/teen<br>"
+        # f"/api/v1.0/unmarried<br>"
+        # f"/api/v1.0/medianincome<br>"
+    
 
 @app.route("/api/v1.0/infants")
 def infants():
