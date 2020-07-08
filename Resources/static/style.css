@@ -26,7 +26,7 @@ body {
 .red-headed-stepchild {
   width: 98%;
   padding: 0em;
-  border: 1px;
+  border: 1em;
   float: left;
 }
 
@@ -60,3 +60,7 @@ p {
 }
 
 
+#mortality_map {
+  border:3em;
+  color: grey;
+}
