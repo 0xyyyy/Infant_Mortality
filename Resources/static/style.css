@@ -60,7 +60,14 @@ p {
 }
 
 
-#mortality_map {
+#map {
   border:3em;
   color: grey;
+  width: 900px;
+  height: 700px;
 }
+
+button {
+  width: 100px;
+}
+
