@@ -27,6 +27,14 @@ teen = Base.classes.teen
 
 medianincome = Base.classes.medianincome
 
+infant_2018 = Base.classes.infantlatest
+
+lowbirth2018 = Base.classes.birthweight2018
+
+teen_2018 = Base.classes.teen2018
+
+unmarried_2018 = Base.classes.unmarried2018
+
 # create an app, pass __name__
 app = Flask(__name__)
 
@@ -58,9 +66,29 @@ def infants():
         data_dict["Rate per 1000"] = RATE,
         data_dict["Deaths"] = DEATHS
         all_info.append(data_dict)
+    return jsonify(all_info)       
+
+@app.route("/api/v1.0/infants2018")
+def infant2018():
+    session = Session(engine)
+
+    results = session.query(infant_2018.YEAR, infant_2018.STATE, infant_2018.RATE, infant_2018.DEATHS).all()
+
+    session.close()
+
+    all_info = []
+    for YEAR, STATE, RATE, DEATHS in results:
+        data_dict = {}
+        data_dict["Year"] = YEAR,
+        data_dict["State"] = STATE,
+        data_dict["Rate per 1000"] = RATE,
+        data_dict["Deaths"] = DEATHS
+        all_info.append(data_dict)
+    return jsonify(all_info)
+
         
     
-    return jsonify(all_info)
+
 @app.route("/api/v1.0/birthweight")
 def birthweights():
     session = Session(engine)
@@ -78,6 +106,24 @@ def birthweights():
         bw_info.append(bw_dict)
 
     return jsonify(bw_info)
+
+@app.route("/api/v1.0/birthweight2018")
+def birthweight2018():
+    session = Session(engine)
+
+    results = session.query(lowbirth2018.YEAR, lowbirth2018.STATE, lowbirth2018.RATE).all()
+
+    session.close()
+
+    all_lowbirth2018_info = []
+    for YEAR, STATE, RATE in results:
+        lowbirth_dict = {}
+        lowbirth_dict["Year"] = YEAR,
+        lowbirth_dict["State"] = STATE,
+        lowbirth_dict["Rate"] = RATE
+        all_lowbirth2018_info.append(lowbirth_dict)
+    
+    return jsonify(all_lowbirth2018_info)
 
 @app.route("/api/v1.0/teen")
 def teens():
@@ -97,6 +143,24 @@ def teens():
 
     return jsonify(teen_info)
 
+@app.route("/api/v1.0/teen2018")
+def teen2018():
+    session = Session(engine)
+
+    results = session.query(teen_2018.YEAR, teen_2018.STATE, teen_2018.RATE).all()
+
+    session.close()
+
+    teen2018_info = []
+    for YEAR, STATE, RATE, in results:
+        teen2018_dict = {}
+        teen2018_dict["Year"] = YEAR,
+        teen2018_dict["State"] = STATE,
+        teen2018_dict["Rate"] = RATE
+        teen2018_info.append(teen2018_dict)
+    
+    return jsonify(teen2018_info)
+
 @app.route("/api/v1.0/unmarried")
 def unmarrieds():
     session = Session(engine)
@@ -114,6 +178,25 @@ def unmarrieds():
         unmarried_info.append(unmarried_dict)
     
     return jsonify(unmarried_info)
+
+@app.route("/api/v1.0/unmarried2018")
+def unmarried2018():
+    session = Session(engine)
+
+    results = session.query(unmarried_2018.YEAR, unmarried_2018.STATE, unmarried_2018.RATE).all()
+
+    session.close()
+
+    unmarried2018_info = []
+    for YEAR, STATE, RATE in results:
+        unmarried2018_dict = {}
+        unmarried2018_dict["Year"] = YEAR,
+        unmarried2018_dict["State"] = STATE,
+        unmarried2018_dict["Rate"] = RATE
+        unmarried2018_info.append(unmarried2018_dict)
+    
+    return jsonify(unmarried2018_info)
+
 
 @app.route("/api/v1.0/medianincome")
 def medianincome_():
