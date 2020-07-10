@@ -35,6 +35,8 @@ teen_2018 = Base.classes.teen2018
 
 unmarried_2018 = Base.classes.unmarried2018
 
+combined = Base.classes.combined
+
 # create an app, pass __name__
 app = Flask(__name__)
 
@@ -55,6 +57,29 @@ def view2():
 @app.route("/view1.html")
 def view1():
     return render_template('view1.html')
+
+@app.route("/api/v1.0/combined")
+def combined_df():
+    session = Session(engine)
+
+    results = session.query(combined.ID, combined.State, combined.Infant_Death_Per_1000, combined.Infant_Deaths, combined.Year, combined.Median_Income, combined.Teen_Birth_Rate_Per_1000, combined.Unmarried_Birth_Rate, combined.Low_Birthweight_Rate)
+
+    session.close()
+
+    combined_info = []
+    for ID, State, Infant_Death_Per_1000, Infant_Deaths, Year, Median_Income, Teen_Birth_Rate_Per_1000, Unmarried_Birth_Rate, Low_Birthweight_Rate in results:
+        combined_dict = {}
+        combined_dict["ID"] = ID,
+        combined_dict["State"] = State,
+        combined_dict["Infant_Death_Rate"] = Infant_Death_Per_1000,
+        combined_dict["Infant_Deaths"] = Infant_Deaths,
+        combined_dict["Year"] = Year,
+        combined_dict["Median_Income"] = Median_Income,
+        combined_dict["Teen_Birth_Rate"] = Teen_Birth_Rate_Per_1000,
+        combined_dict["Unmarried_Birth_Rate"] = Unmarried_Birth_Rate,
+        combined_dict["Low_Birthweight_Rate"] = Low_Birthweight_Rate
+        combined_info.append(combined_dict)
+    return jsonify(combined_info)
 
 @app.route("/api/v1.0/infants")
 def infants():
