@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Infant Mortality Map</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+
+    <style type="text/css">
+    #map {
+        width: 900px;
+        height: 700px;
+    }
+    
+    button {
+        width: 100px;
+    }
+
+    </style>
+
+</head>
+
+<body>                          
+    <!-- <h1>Infant Mortality Map</h1> -->
+    <div id="map"></div>
+
+    <script type="text/javascript" src="STATES.js"></script>
+
+    <script type="text/javascript">
+    
+
+	var map = L.map('map').setView([37.8, -96], 4);
+
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        maxZoom: 10,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/light-v9',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+
+    // Add hover
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
+    };
+
+    info.update = function (props) {
+        this._div.innerHTML = '<h3><b>Infant Mortality Rates in the USA</b></h3>' +  (props ?
+            '<b><font size="+1">' + props.name + '</b></font size="+1"><br/><i>' + '<b>' + props.rate + '</b>' + '<b> deaths per 1,000 infants </b>' +  '<br /></i>' + 
+            props.lowbw + ' low birthweights per 1,000 women' + '<br />' + 
+            props.teen + ' teen births per 1,000 women' + '<br />' +
+            props.un + ' unmarried mothers per 1,000 women'
+            : 'Hover over a state');
+    };
+
+    info.addTo(map);
+
+
+    // Color depending on rate value
+    function getColor(d) {
+        return d > 9 ? '#2820D7' :
+                d > 8  ? '#2047D7' :
+                d > 7  ? '#2065D7' :
+                d > 6  ? '#2084D7' :
+                d > 5  ? '#20A8D7' :
+                d > 4  ? '#20BED7' :
+                d > 3  ? '#20CCD7' :
+                d > 2  ? '#20D7C6' :
+                d > 1  ? '#20D7AD' :
+                d > 0  ? '#20D78F' :
+                        '#20D78F' ;
+    }
+
+    function style(feature) {
+        return {
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7,
+            fillColor: getColor(feature.properties.rate)
+        };
+    }
+
+    // Add interaction
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '3',
+            fillOpacity: 0.7
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties);
+    }
+
+    var geojson;
+
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+        info.update();
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
+
+    geojson = L.geoJson(statesData, {
+        style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+    // Make legend
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            labels = [],
+            from, to;
+
+        for (var i = 0; i < grades.length; i++) {
+            from = grades[i];
+            to = grades[i + 1];
+
+            labels.push(
+                '<i style="background:' + getColor(from + 0) + '"></i> ' +
+                from + (to ? '&ndash;' + to : '+'));
+        }
+
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+
+    legend.addTo(map);
+  
+    </script>
+</body>
+
+</html>
