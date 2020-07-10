@@ -48,7 +48,9 @@ def home():
         # f"/api/v1.0/teen<br>"
         # f"/api/v1.0/unmarried<br>"
         # f"/api/v1.0/medianincome<br>"
-    
+@app.route("/view2.html")
+def view2():
+    return render_template('view2.html')
 
 @app.route("/api/v1.0/infants")
 def infants():
