@@ -99,23 +99,49 @@ const medianIncome_df = d3.json(url.medianIncome_url).then(data => console.log(d
     const dataPromise_income = d3.json(url.medianIncome_url);
     console.log("Data Promsie: ", dataPromise_income);
 
-var svgWidth = 800;
-var svgHeight = 500;
-    
-var margin = {
-    top: 60,
-    right: 60,
-    bottom: 60,
-    left: 60
-};
-    
-var width = svgWidth - margin.left - margin.right;
-var height = svgHeight - margin.top - margin.bottom;
-    
-var svg = d3.select("#scatter")
-    .append("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight);
-    
-var chartGroup = svg.append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);    
+
+function responsiveWrapper() {
+
+    var svgArea = d3.select('body').select("svg")
+
+        if (!svgArea.empty()) {
+            svgArea.remove()
+        }
+        var svgWidth = 800;
+        var svgHeight = 500;
+            
+        var margin = {
+            top: 60,
+            right: 60,
+            bottom: 60,
+            left: 60
+        };
+            
+        var width = svgWidth - margin.left - margin.right;
+        var height = svgHeight - margin.top - margin.bottom;
+            
+        var svg = d3.select("#scatter")
+            .append("svg")
+            .attr("width", svgWidth)
+            .attr("height", svgHeight);
+            
+        var chartGroup = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+            
+        var xValue = medianincome
+        var yValue = // infant mortality
+        // xValue in below function refers to xValue variable 
+        function xScale(medianincome, xValue ) { 
+            var xLinearScale = d3.scaleLinear()
+                .domain([d3.min(medianincome, d => d[xValue]), d3.max(medianincome, d=> d[xValue])])
+                .range(0, chartWidth)
+
+        function yScale(infantmortality, yValue) {
+            var yLinearScale = d3.scaleLinear()
+                .domain([d3.min(infant mortality, d => d[yValue]), d3.max(infant mortality, d => d[yValue])])
+                .range(chartHeight, 0)
+        }
+        }
+}
+ 
+
