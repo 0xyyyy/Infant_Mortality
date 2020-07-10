@@ -63,7 +63,7 @@ def infants():
         data_dict = {}
         data_dict["Year"] = YEAR,
         data_dict["State"] = STATE,
-        data_dict["Rate per 1000"] = RATE,
+        data_dict["Rate_per_1000"] = RATE,
         data_dict["Deaths"] = DEATHS
         all_info.append(data_dict)
     return jsonify(all_info)       
@@ -81,7 +81,7 @@ def infant2018():
         data_dict = {}
         data_dict["Year"] = YEAR,
         data_dict["State"] = STATE,
-        data_dict["Rate per 1000"] = RATE,
+        data_dict["Rate_per_1000"] = RATE,
         data_dict["Deaths"] = DEATHS
         all_info.append(data_dict)
     return jsonify(all_info)
@@ -211,7 +211,7 @@ def medianincome_():
         medianincome_dict = {}
         medianincome_dict["Year"] = YEAR,
         medianincome_dict["State"] = STATE,
-        medianincome_dict["Median Income"] = MEDIANINCOME
+        medianincome_dict["Median_Income"] = MEDIANINCOME
         medianincome_info.append(medianincome_dict)
     
     return jsonify(medianincome_info)

@@ -69,7 +69,9 @@ var statesData = {"type":"FeatureCollection","features":[
 //     const dataPromise_infant = d3.json(url.infant_url);
 //     console.log("Data Promise: ", dataPromise_infant);
 
-const infant2018_df = d3.json(url.infant2018_url).then(data=> console.log(data));
+const infant2018_df = d3.json(url.infant2018_url).then(data => console.log(data));
+
+console.log(Object.keys(infant2018_df))
 
 // const birthweight_df = d3.json(url.birthweight_url).then(data => console.log(data));
 
@@ -97,5 +99,13 @@ const medianIncome_df = d3.json(url.medianIncome_url).then(data => console.log(d
     const dataPromise_income = d3.json(url.medianIncome_url);
     console.log("Data Promsie: ", dataPromise_income);
 
+var svg = d3.select("#scatter")
+            .append("svg")
+            .attr("height", chartHeight)
+            .attr("width", chartWidth)
+
+var chartGroup = svg
+            .append("g")
+            .attr("transform", `translate(${chartMargins.left}, ${chartMargins.top})`)
 
 
