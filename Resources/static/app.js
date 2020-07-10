@@ -7,7 +7,8 @@ const url = {
     infant2018_url: "http://127.0.0.1:5000/api/v1.0/infants2018",
     birthweight2018_url: "http://127.0.0.1:5000/api/v1.0/birthweight2018",
     teen2018_url: "http://127.0.0.1:5000/api/v1.0/teen2018",
-    unmarried2018_url: "http://127.0.0.1:5000/api/v1.0/unmarried2018"
+    unmarried2018_url: "http://127.0.0.1:5000/api/v1.0/unmarried2018",
+    combined_url: "http://127.0.0.1:5000/api/v1.0/combined"
 }
 
 var statesData = {"type":"FeatureCollection","features":[
@@ -97,249 +98,295 @@ const unmarried2018_df = d3.json(url.unmarried2018_url).then(data=> console.log(
     const dataPromise_income = d3.json(url.medianIncome_url);
     console.log("Data Promsie: ", dataPromise_income);
 
-var svgWidth = 980;
-var svgHeight = 620;
+// var svgWidth = 980;
+// var svgHeight = 620;
 
-var chartMargins = {
-    top: 20,
-    right: 20, 
-    bottom: 20, 
-    left: 20
+// var chartMargins = {
+//     top: 20,
+//     right: 20, 
+//     bottom: 20, 
+//     left: 20
+// };
+
+// //define dimensions of the chart area
+// var chartWidth = svgWidth - chartMargins.right - chartMargins.left;
+// var chartHeight = svgHeight - chartMargins.top - chartMargins.bottom;
+
+// var svg = d3.select('#scatter')
+//     .append('svg')
+//     .attr('height', chartHeight)
+//     .attr('width', chartWidth)
+
+// var chartGroup = svg.append('g')
+//     .attr("transform", `translate(${chartMargins.left}, ${chartMargins.top})`);
+
+// var infant2018_df = d3.json(url.infant2018_url).then(function(infantData) {
+//     infantData.forEach(function(d) {
+//         d.Year = +d.Year
+//         d.Rate_per_1000 = +d.Rate_per_1000
+//         d.Deaths = +d.Deaths
+//     })
+//     var yLinearScale = d3.scaleLinear()
+//         .domain([0, d3.max(infantData, d => d.Rate_per_1000)])
+//         .range([0, chartWidth]);
+    
+//     var leftAxis = d3.axisLeft(yLinearScale);
+
+//     chartGroup.append("g").call(leftAxis)
+// })
+// var medianIncome_df = d3.json(url.medianIncome_url).then(function(incomeData) {
+//     incomeData.forEach(function(d) {
+//         d.Year = +d.Year
+//         d.Median_Income = +d.Median_Income
+//     })
+//     var xLinearScale = d3.scaleLinear()
+//     .domain([0, d3.max(incomeData, d => d.Median_Income)])
+//     .range([0, chartWidth])
+    
+//     var bottomAxis = d3.axisBottom(xLinearScale)
+
+//     chartGroup.append("g")
+//         .attr("transform", `translate(0, -20)`)
+//         .call(bottomAxis)
+//     var circlesGroup = chartGroup.selectAll("circle")
+//         .data(incomeData)
+//         .enter()
+//         .append("circle")
+//         .attr("cx", d => xLinearScale(d.Median_Income))
+//         .attr("cy", d => yLinearScale(d.Median_Income))
+//         .attr("r", "15")
+//         .attr("fill", "pink")
+//         .attr("opacity", ".5")
+// })
+function responsiveWrapper() {
+    var svgArea = d3.select('body').select('svg')
+    // clear svg
+    if (!svgArea.empty()) {
+        svgArea.remove()
+    }
+    //Define SVG area dimensions
+    var svgWidth = 980
+    var svgHeight = 620 
+
+    var chartMargin = {
+        top: 20,
+        right: 40, 
+        bottom: 100,
+        left: 100
+    };
+    var chartWidth = svgWidth - chartMargin.left - chartMargin.right
+    var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom
+
+    var svg = d3.select('#scatter')
+        .append('svg')
+        .attr('height', svgHeight)
+        .attr('width', svgWidth)
+
+    var chartGroup = svg.append('g')
+        .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`);
+
+    var xValue = 'Median_Income';
+    var yValue = 'Infant_Death_Rate';
+    // function to update xScale labels when clicked
+    function xScale(combinedData, xValue) {
+        // func to set the x axis scale of the chart
+        var xLinearScale = d3.scaleLinear()
+            .domain([d3.min(combinedData, d => d[xValue]) * 0.5,d3.max(combinedData, d => d[xValue])])
+            .range([0, chartWidth])
+        return xLinearScale;
+    };
+
+    function yScale(combinedData, yValue) {
+        var yLinearScale = d3.scaleLinear()
+            .domain([
+                d3.min(combinedData, d=> d[yValue] * 0.5,
+                d3.max(combinedData, d=> d[yValue]))
+            ])
+            .range([chartHeight, 0])
+        return yLinearScale;
+    };
+
+    function updateXAxes (newXScale, xAxis) {
+        var bottomaxis = d3.axisBottom(newXScale)
+        xAxis
+            .transition()
+            .duration(1500)
+            .call(bottomaxis)
+        return xAxis
+    };
+
+    function updateYAxes (newYScale, yAxis) {
+        var leftAxis = d3.axisLeft(newYScale)
+        yAxis
+            .transition()
+            .duration(1500)
+            .call(leftAxis)
+        return yAxis
+    };
+
+    function renderCircles (
+        circlesGroup,
+        newXScale,
+        xValue,
+        newYScale,
+        yValue
+    ) {
+        circlesGroup.transition()
+            .duration(1500)
+            .attr('cx', d => newXScale(d[xValue]))
+            .attr('cy', d => newYScale(d[yValue]))
+        return circlesGroup;
+    };
+
+    function renderText (
+        textGroup,
+        newXScale,
+        xValue,
+        newYScale,
+        yValue
+    ) {
+        textGroup.transition()
+            .duration(1500)
+            .attr('x', d=> newXScale(d[xValue]))
+            .attr('y', d=> newYScale(d[yValue]))
+            .attr('text-anchor', 'middle')
+        return textGroup
+    };
+
+    function updateToolTip (xValue, yValue, circlesGroup, textGroup) {
+        if (xValue === 'Median_Income') {
+            var xLabel = 'Median Income ($)'
+        } else if (xValue === 'Infant_Death_Rate') {
+            var xLabel = "Infant Death Rate/1000"
+        } else if (xValue === 'Infant_Deaths') {
+            var xLabel = "Total Infant Deaths"
+        } else if (xValue === "Teen_Birth_Rate") {
+            var xLabel = "Teen Birth Rate/1000"
+        } else if (xValue === "Unmarried_Birth_Rate") { 
+            var xLabel = "Unmarried Birth Rate/1000"
+        } else {
+            xLabel = "Low Birthweight Rate/1000"
+        }
+
+        if (yValue === "Infant_Death_Rate") {
+            var yLabel = "Infant Death Rate/1000"
+        } else if (yValue === "Infant_Deaths") {
+            var yLabel = "Total Infant Deaths"
+        } else if (yValue === "Teen_Birth_Rate") {
+            var yLabel = "Teen Birth Rate/1000"
+        } else if (yValue === "Unmarried_Birth_Rate") {
+            var yLabel = "Unmarried Birth Rate/1000"
+        } else if (yValue === "Low_Birthweight_Rate") {
+            var yLabel = "Low Birthweight Rate/1000"
+        } else {
+            yLabel = "Median Income"
+        }
+
+        //create tooltips
+        var tool_tip = d3.tip()
+            .attr('class', 'tooltip d3-tip')
+            .offset([90, 90])
+            .html( function(d) {
+        return `<strong>${d.State}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
+        })
+    circlesGroup.call(tool_tip)
+    circlesGroup.on('mouseover', function(data) {
+        tool_tip.show(data, this)
+    })
+    .on('mouseout', function(data) {
+        tool_tip.hide(data)
+    })
+
+    textGroup.call(tool_tip)
+    textGroup.on('mouseover', function(data) {
+        tool_tip.show(data, this)
+    })
+    .on('mouseout', function(data) {
+        tool_tip.hide(data)
+    })
+    return circlesGroup
+    }
+
+    d3.json(url.combined_url).then(function(combinedData) {
+        combinedData.forEach(function(data) {
+            data.ID = +data.ID
+            data.Infant_Death_Rate = +data.Infant_Death_Rate
+            data.Infant_Deaths = +data.Infant_Deaths
+            data.Year = +data.Year
+            data.Median_Income = +data.Median_Income
+            data.Teen_Birth_Rate = +data.Teen_Birth_Rate
+            data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
+            data.Low_Birthweight_rate = +data.Low_Birthweight_rate
+        })
+        console.log(combinedData)
+
+        var xLinearScale = xScale(combinedData, xValue)
+        var yLinearScale = yScale(combinedData, yValue)
+
+        var bottomAxis = d3.axisBottom(xLinearScale)
+        var leftAxis = d3.axisLeft(yLinearScale)
+
+        var xAxis = chartGroup.append('g')
+            .classed('x-axis', true)
+            .attr('transform', `translate(0, ${chartHeight})`)
+            .call(bottomAxis)
+        
+        var yAxis = chartGroup.append('g')
+            .classed('y-axis', true)
+            .call(leftAxis)
+
+        var circlesGroup = chartGroup.selectAll(".stateCircle")
+            .data(combinedData)
+            .enter()
+            .append('circle')
+            .attr('cx', d => xLinearScale(d[xValue]))
+            .attr('cy', d => yLinearScale(d[yValue]))
+            .attr('class', 'stateCircle')
+            .attr('r', 12, dy = '.4em')
+            .attr('opacity', '0.70')
+        
+        var textGroup = chartGroup.selectAll('.stateText')
+            .data(combinedData)
+            .enter()
+            .append("text")
+            .attr('x', d=> xLinearScale(d[xValue]))
+            .attr('y', d=> yLinearScale(d[yValue]))
+            .text(d=> d.State)
+            .attr("class", "stateText")
+            .attr("font-size", "12px")
+            .attr('text-anchor', 'middle')
+            .attr('fill', 'grey')
+        var xLabelsGp = chartGroup.append('g')
+            .attr('transform', `translate(${chartWidth/2}, ${chartHeight + 20})`)
+
+        var povLabel = xLabelsGp
+            .append('text')
+            .attr('x',0)
+            .attr('y', 20)
+            .attr('value', 'Median_Income')
+            .classed('active', true)
+            .text('Median Income ($)')
+
+        var circlesGroup = updateToolTip(xValue, yValue, circlesGroup, textGroup)
+
+        textGroup = renderText(
+            textGroup,
+            xLinearScale,
+            xValue,
+            yLinearScale,
+            yValue
+        )
+
+        circlesGroup = updateToolTip(
+            xValue,
+            yValue,
+            circlesGroup,
+            textGroup
+        )
+    })
 };
+responsiveWrapper()
+// d3.select(window).on('resize', makeResponsive)
 
-//define dimensions of the chart area
-var chartWidth = svgWidth - chartMargins.right - chartMargins.left;
-var chartHeight = svgHeight - chartMargins.top - chartMargins.bottom;
-
-var svg = d3.select('#scatter')
-    .append('svg')
-    .attr('height', chartHeight)
-    .attr('width', chartWidth)
-
-var chartGroup = svg.append('g')
-    .attr("transform", `translate(${chartMargins.left}, ${chartMargins.top})`);
-
-var infant2018_df = d3.json(url.infant2018_url).then(function(infantData) {
-    infantData.forEach(function(d) {
-        d.Year = +d.Year
-        d.Rate_per_1000 = +d.Rate_per_1000
-        d.Deaths = +d.Deaths
-    })
-    var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(infantData, d => d.Rate_per_1000)])
-        .range([0, chartWidth]);
-    
-    var leftAxis = d3.axisLeft(yLinearScale);
-
-    chartGroup.append("g").call(leftAxis)
-})
-var medianIncome_df = d3.json(url.medianIncome_url).then(function(incomeData) {
-    incomeData.forEach(function(d) {
-        d.Year = +d.Year
-        d.Median_Income = +d.Median_Income
-    })
-    var xLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(incomeData, d => d.Median_Income)])
-    .range([0, chartWidth])
-    
-    var bottomAxis = d3.axisBottom(xLinearScale)
-
-    chartGroup.append("g")
-        .attr("transform", `translate(0, -20)`)
-        .call(bottomAxis)
-    var circlesGroup = chartGroup.selectAll("circle")
-        .data(incomeData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => xLinearScale(d.Median_Income))
-        .attr("cy", d => yLinearScale(d.Median_Income))
-        .attr("r", "15")
-        .attr("fill", "pink")
-        .attr("opacity", ".5")
-})
-// step 2: Create Scale functions 
-
-// function responsiveWrapper() {
-
-//     var svgArea = d3.select('body').select("svg")
-
-//         if (!svgArea.empty()) {
-//             svgArea.remove()
-//         }
-//         var svgWidth = 800;
-//         var svgHeight = 500;
-            
-//         var margin = {
-//             top: 60,
-//             right: 60,
-//             bottom: 60,
-//             left: 60
-//         };
-            
-//         var width = svgWidth - margin.left - margin.right;
-//         var height = svgHeight - margin.top - margin.bottom;
-            
-//         var svg = d3.select("#scatter")
-//             .append("svg")
-//             .attr("width", svgWidth)
-//             .attr("height", svgHeight);
-            
-//         var chartGroup = svg.append("g")
-//             .attr("transform", `translate(${margin.left}, ${margin.top})`);
-            
-//         var xValue = medianincome
-//         var yValue = // infant mortality
-//         // xValue in below function refers to xValue variable 
-//         function xScale(medianincome, xValue ) { 
-//             var xLinearScale = d3.scaleLinear()
-//                 .domain([d3.min(medianincome, d => d[xValue]), d3.max(medianincome, d=> d[xValue])])
-//                 .range(0, chartWidth)
-//             return xLinearScale
-//         };
-
-//         function yScale(infant2018_df, yValue) {
-//             var yLinearScale = d3.scaleLinear()
-//                 .domain([d3.min(infant2018_df, d => d[yValue]), d3.max(infant2018_df, d => d[yValue])])
-//                 .range(chartHeight, 0)
-//             return yLinearScale
-//         };
-//         function updateXAxes (newXScale, xAxis) {
-//             var bottomAxis = d3.axisBottom(newXScale)
-//             xAxis
-//               .transition()
-//               .duration(1500)
-//               .call(bottomAxis)
-//             return xAxis
-//           }
-//           // Func to update yAxis when axis label is clicked
-//         function updateYAxes (newYScale, yAxis) {
-//         var leftAxis = d3.axisLeft(newYScale)
-//         yAxis
-//             .transition()
-//             .duration(1500)
-//             .call(leftAxis)
-//         return yAxis;
-//         };
-//         function renderCircles (
-//         circlesGroup, 
-//         newXScale, 
-//         xValue,
-//         newYScale, 
-//         yValue
-//         ) {
-//         circlesGroup
-//         .transition()
-//         .duration(1500)
-//         .attr('cx', d => newXScale(d[xValue]))
-//         .attr('cy', d => newYScale(d[yValue]))
-//         return circlesGroup;
-//         };
-//         function renderText (
-//             textGroup,
-//             newXScale,
-//             xValue,
-//             newYScale,
-//             yValue
-//           ) {
-//             textGroup
-//               .transition()
-//               .duration(1500)
-//               .attr('x', d => newXScale(d[xValue]))
-//               .attr('y', d => newYScale(d[yValue]))
-//               .attr('text-anchor', 'middle') 
-//             return textGroup
-//           };
-//         function updateToolTip (xValue, yValue, circlesGroup, textGroup) {
-//         if (xValue === 'poverty') {
-//             var xLabel = 'Poverty (%)'
-//         } else if (xValue === 'age') {
-//             var xLabel = 'Age (median)'
-//         } else {
-//             var xLabel = 'Income (median)'
-//         }
-//         if (yValue === 'healthcare') {
-//             var yLabel = 'Healthcare (%)'
-//         } else if (yValue === 'obesity') {
-//             var yLabel = 'Obesity (%)'
-//         } else {
-//             var yLabel = 'Smokers (%)'
-//         }
-//         // Create tooltips
-//         var tool_tip = d3.tip()
-//             .attr('class', 'tooltip d3-tip')
-//             .offset([90, 90])
-//             .html(function (d) {
-//             return `<strong>${d.abbr}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
-//             })
-//         // circles tooltips with event listeners 
-//         circlesGroup.call(tool_tip)
-//         circlesGroup
-//             .on('mouseover', function (data) {
-//             tool_tip.show(data, this)
-//             })
-//             .on('mouseout', function (data) {
-//             tool_tip.hide(data)
-//             })
-//         // text tooltips with event listeners
-//         textGroup.call(tool_tip)
-//         textGroup
-//             .on('mouseover', function (data) {
-//             tool_tip.show(data, this)
-//             })
-//             .on('mouseout', function (data) {
-//             tool_tip.hide(data)
-//             })
-//         return circlesGroup
-//         };
-//         const infant2018_df = d3.json(url.infant2018_url).then(function (infantData) {
-//             infantData.forEach(function (data) {
-//                 data.Year = +data.Year
-//                 data.Rate_per_1000 = +data.Rate_per_1000
-//                 data.Deaths = +data.Deaths
-//             })
-//             console.log(infantData)
-//             // x and y linear scale functions for the chart 
-//             var xLinearScale = xScale(infantData, xValue)
-//             var yLinearScale = yScale(infantData, yValue)
-
-//             var bottomAxis = d3.Fom(xLinearScale)
-//             var leftAxis = d3.axisLeft(yLinearScale)
-//             var xAxis = chartGroup.append('g')
-//                 .classed('x-axis', true)
-//                 .attr('transform', `translate(0, ${height})`)
-//                 .call(bottomAxis)
-            
-//             var yAxis = chartGroup.append('g')
-//                 .classed('y-axis', true)
-//                 .call(leftAxis)
-            
-//             var circlesGroup = chartGroup.selectAll('.stateCircle')
-//                 .data(infantData)
-//                 .enter()
-//                 .append('circle')
-//                 .attr('cx', d=> xLinearScale(d[xValue]))
-//                 .attr('cy', d=> yLinearScale(d[yValue]))
-//                 .attr('class', 'stateCircle')
-//                 .attr('r', 12, dy = '.4em')
-//                 .attr('opacity', '0.70')
-//             var textGroup = chartGroup.selectAll('.stateText')
-//                 .data(infantData)
-//                 .enter()
-//                 .append('text')
-//                 .attr('x', d => xLinearScale(d[xValue]))
-//                 .attr('y', d => yLinearScale(d[yValue]))
-//                 .text(d => d.State)
-//                 .attr('class', 'stateText')
-//                 .attr('font-size', '12px')
-//                 .attr('text-anchor', 'middle')
-//                 .attr('fill', 'grey')
-//             var xLabelsGp = chartGroup.append('g')
-//                 .attr('transform', `translate(${width/2}, ${height + 20})`)
-
-//         })
-
-
-
-// }
  
 
