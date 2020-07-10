@@ -51,6 +51,10 @@ def home():
 @app.route("/view2.html")
 def view2():
     return render_template('view2.html')
+    
+@app.route("/view1.html")
+def view1():
+    return render_template('view1.html')
 
 @app.route("/api/v1.0/infants")
 def infants():
