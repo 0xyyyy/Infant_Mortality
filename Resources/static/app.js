@@ -198,582 +198,582 @@ var chartGroup = svg.append('g')
 
 //     chartGroup.append("g").call(leftAxis)
 // })
-var medianIncome_df = d3.json(url.combined_url).then(function(incomeData) {
-    incomeData.forEach(function(data) {
-        data.ID = +data.ID
-        data.Infant_Death_Rate = +data.Infant_Death_Rate
-        data.Infant_Deaths = +data.Infant_Deaths
-        data.Year = +data.Year
-        data.Median_Income = +data.Median_Income
-        data.Teen_Birth_Rate = +data.Teen_Birth_Rate
-        data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
-        data.Low_Birthweight_rate = +data.Low_Birthweight_rate
-        console.log(data.Infant_Deaths)
+// var medianIncome_df = d3.json(url.combined_url).then(function(incomeData) {
+//     incomeData.forEach(function(data) {
+//         data.ID = +data.ID
+//         data.Infant_Death_Rate = +data.Infant_Death_Rate
+//         data.Infant_Deaths = +data.Infant_Deaths
+//         data.Year = +data.Year
+//         data.Median_Income = +data.Median_Income
+//         data.Teen_Birth_Rate = +data.Teen_Birth_Rate
+//         data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
+//         data.Low_Birthweight_rate = +data.Low_Birthweight_rate
+//         console.log(data.Infant_Deaths)
+//     })
+//     console.log(incomeData)
+//     var xLinearScale = d3.scaleLinear()
+//     .domain([0, d3.max(incomeData, d => d.Teen_Birth_Rate)])
+//     .range([0, chartWidth])
+    
+//     var bottomAxis = d3.axisBottom(xLinearScale)
+
+//     var yLinearScale = d3.scaleLinear()
+//     .domain([0, d3.max(incomeData, d => d.Infant_Deaths)])
+//     .range([520, 0]);
+
+//     var leftAxis = d3.axisLeft(yLinearScale);
+
+
+//     chartGroup.append("g").call(leftAxis)
+
+//     chartGroup.append("g")
+//         .attr("transform", `translate(0, 520)`)
+//         .call(bottomAxis)
+//     var circlesGroup = chartGroup.selectAll("circle")
+//         .data(incomeData)
+//         .enter()
+//         .append("circle")
+//         .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
+//         .attr("cy", d => yLinearScale(d.Infant_Deaths))
+//         .attr("r", "15")
+//         .attr("fill", "steelblue")
+//         .attr("opacity", ".5")
+//     var textGroup = chartGroup.selectAll(".stateText")
+//         .data(incomeData)
+//         .enter()
+//         .append('text')
+//         .attr('x', d => xLinearScale(d.Teen_Birth_Rate))
+//         .attr('y', d => yLinearScale(d.Infant_Deaths))
+//         .text(d => d.State)
+//         .attr('class', 'stateText')
+//         .attr('text-anchor', 'middle')
+//         .attr('fill', 'red')
+
+//     chartGroup.append("text")
+//         .attr("transform", "rotate(-90)")
+//         .attr("y", 0 - chartMargins.left + 40)
+//         .attr("x", 0 - (chartHeight/2))
+//         .attr("dy", "1em")
+//         .attr("class", "axisText")
+//         .text("Average Income per Capita")
+
+// })
+
+
+
+
+
+
+function responsiveWrapper() {
+    var svgArea = d3.select('body').select('svg')
+    // clear svg
+    if (!svgArea.empty()) {
+        svgArea.remove()
+    }
+    //Define SVG area dimensions
+    var svgWidth = 980
+    var svgHeight = 620 
+
+    var chartMargin = {
+        top: 20,
+        right: 40, 
+        bottom: 100,
+        left: 100
+    };
+    var chartWidth = svgWidth - chartMargin.left - chartMargin.right
+    var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom
+
+    var svg = d3.select('#scatter')
+        .append('svg')
+        .attr('height', svgHeight)
+        .attr('width', svgWidth)
+
+    var chartGroup = svg.append('g')
+        .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`);
+
+    var xValue = 'Median_Income';
+    var yValue = 'Infant_Death_Rate';
+    // function to update xScale labels when clicked
+    function xScale(combinedData, xValue) {
+        // func to set the x axis scale of the chart
+        var xLinearScale = d3.scaleLinear()
+            .domain([d3.min(combinedData, d => d[xValue]) * 0.5,d3.max(combinedData, d => d[xValue])])
+            .range([0, chartWidth])
+        return xLinearScale;
+    };
+
+    function yScale(combinedData, yValue) {
+        var yLinearScale = d3.scaleLinear()
+            .domain([0, d3.max(combinedData, d => d[yValue])])
+            .range([chartHeight, 0])
+        return yLinearScale;
+    };
+
+        // var yLinearScale = d3.scaleLinear()
+        //     .domain([0, d3.max(incomeData, d => d.Infant_Deaths)])
+        //     .range([0, chartWidth]);
+
+    function updateXAxes (newXScale, xAxis) {
+        var bottomaxis = d3.axisBottom(newXScale)
+        xAxis
+            .transition()
+            .duration(1500)
+            .call(bottomaxis)
+        return xAxis
+    };
+
+    function updateYAxes (newYScale, yAxis) {
+        var leftAxis = d3.axisLeft(newYScale)
+        yAxis
+            .transition()
+            .duration(1500)
+            .call(leftAxis)
+        return yAxis
+    };
+
+    function renderCircles (
+        circlesGroup,
+        newXScale,
+        xValue,
+        newYScale,
+        yValue
+    ) {
+        circlesGroup.transition()
+            .duration(1500)
+            .attr('cx', d => newXScale(d[xValue]))
+            .attr('cy', d => newYScale(d[yValue]))
+        return circlesGroup;
+    };
+
+    function renderText (
+        textGroup,
+        newXScale,
+        xValue,
+        newYScale,
+        yValue
+    ) {
+        textGroup.transition()
+            .duration(1500)
+            .attr('x', d=> newXScale(d[xValue]))
+            .attr('y', d=> newYScale(d[yValue]))
+            .attr('text-anchor', 'middle')
+        return textGroup
+    };
+
+    function updateToolTip (xValue, yValue, circlesGroup, textGroup) {
+        if (xValue === 'Median_Income') {
+            var xLabel = 'Median Income ($)'
+        } else if (xValue === 'Infant_Death_Rate') {
+            var xLabel = "Infant Death Rate/1000"
+        } else if (xValue === 'Infant_Deaths') {
+            var xLabel = "Total Infant Deaths"
+        } else if (xValue === "Teen_Birth_Rate") {
+            var xLabel = "Teen Birth Rate/1000"
+        } else if (xValue === "Unmarried_Birth_Rate") { 
+            var xLabel = "Unmarried Birth Rate/1000"
+        } else {
+            xLabel = "Low Birthweight Rate/1000"
+        }
+
+        if (yValue === "Infant_Death_Rate") {
+            var yLabel = "Infant Death Rate/1000"
+        } else if (yValue === "Infant_Deaths") {
+            var yLabel = "Total Infant Deaths"
+        } else if (yValue === "Teen_Birth_Rate") {
+            var yLabel = "Teen Birth Rate/1000"
+        } else if (yValue === "Unmarried_Birth_Rate") {
+            var yLabel = "Unmarried Birth Rate/1000"
+        } else if (yValue === "Low_Birthweight_Rate") {
+            var yLabel = "Low Birthweight Rate/1000"
+        } else {
+            yLabel = "Median Income"
+        }
+
+        //create tooltips
+        var tool_tip = d3.tip()
+            .attr('class', 'tooltip d3-tip')
+            .offset([90, 90])
+            .html( function(d) {
+        return `<strong>${d.State}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
+        })
+    circlesGroup.call(tool_tip)
+    circlesGroup.on('mouseover', function(data) {
+        tool_tip.show(data, this)
     })
-    console.log(incomeData)
-    var xLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(incomeData, d => d.Teen_Birth_Rate)])
-    .range([0, chartWidth])
-    
-    var bottomAxis = d3.axisBottom(xLinearScale)
+    .on('mouseout', function(data) {
+        tool_tip.hide(data)
+    })
 
-    var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(incomeData, d => d.Infant_Deaths)])
-    .range([520, 0]);
+    textGroup.call(tool_tip)
+    textGroup.on('mouseover', function(data) {
+        tool_tip.show(data, this)
+    })
+    .on('mouseout', function(data) {
+        tool_tip.hide(data)
+    })
+    return circlesGroup
+    }
 
-    var leftAxis = d3.axisLeft(yLinearScale);
+    d3.json(url.combined_url).then(function(combinedData) {
+        combinedData.forEach(function(data) {
+            data.ID = +data.ID
+            data.Infant_Death_Rate = +data.Infant_Death_Rate
+            data.Infant_Deaths = +data.Infant_Deaths
+            data.Year = +data.Year
+            data.Median_Income = +data.Median_Income
+            data.Teen_Birth_Rate = +data.Teen_Birth_Rate
+            data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
+            data.Low_Birthweight_rate = +data.Low_Birthweight_Rate
+        })
+        console.log(combinedData)
 
+        var xLinearScale = xScale(combinedData, xValue)
+        var yLinearScale = yScale(combinedData, yValue)
 
-    chartGroup.append("g").call(leftAxis)
+        var bottomAxis = d3.axisBottom(xLinearScale)
+        var leftAxis = d3.axisLeft(yLinearScale)
 
-    chartGroup.append("g")
-        .attr("transform", `translate(0, 520)`)
-        .call(bottomAxis)
-    var circlesGroup = chartGroup.selectAll("circle")
-        .data(incomeData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
-        .attr("cy", d => yLinearScale(d.Infant_Deaths))
-        .attr("r", "15")
-        .attr("fill", "steelblue")
-        .attr("opacity", ".5")
-    var textGroup = chartGroup.selectAll(".stateText")
-        .data(incomeData)
-        .enter()
-        .append('text')
-        .attr('x', d => xLinearScale(d.Teen_Birth_Rate))
-        .attr('y', d => yLinearScale(d.Infant_Deaths))
-        .text(d => d.State)
-        .attr('class', 'stateText')
-        .attr('text-anchor', 'middle')
-        .attr('fill', 'red')
-
-    chartGroup.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - chartMargins.left + 40)
-        .attr("x", 0 - (chartHeight/2))
-        .attr("dy", "1em")
-        .attr("class", "axisText")
-        .text("Average Income per Capita")
-
-})
-
-
-
-
-
-
-// function responsiveWrapper() {
-//     var svgArea = d3.select('body').select('svg')
-//     // clear svg
-//     if (!svgArea.empty()) {
-//         svgArea.remove()
-//     }
-//     //Define SVG area dimensions
-//     var svgWidth = 980
-//     var svgHeight = 620 
-
-//     var chartMargin = {
-//         top: 20,
-//         right: 40, 
-//         bottom: 100,
-//         left: 100
-//     };
-//     var chartWidth = svgWidth - chartMargin.left - chartMargin.right
-//     var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom
-
-//     var svg = d3.select('#scatter')
-//         .append('svg')
-//         .attr('height', svgHeight)
-//         .attr('width', svgWidth)
-
-//     var chartGroup = svg.append('g')
-//         .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`);
-
-//     var xValue = 'Teen_Birth_Rate';
-//     var yValue = 'Infant_Death_Rate';
-//     // function to update xScale labels when clicked
-//     function xScale(combinedData, xValue) {
-//         // func to set the x axis scale of the chart
-//         var xLinearScale = d3.scaleLinear()
-//             .domain([d3.min(combinedData, d => d[xValue]) * 0.5,d3.max(combinedData, d => d[xValue])])
-//             .range([0, chartWidth])
-//         return xLinearScale;
-//     };
-
-//     function yScale(combinedData, yValue) {
-//         var yLinearScale = d3.scaleLinear()
-//             .domain(0, d3.max(combinedData, d => d[yValue]))
-//             .range([chartHeight, 0])
-//         return yLinearScale;
-//     };
-
-//         // var yLinearScale = d3.scaleLinear()
-//         //     .domain([0, d3.max(incomeData, d => d.Infant_Deaths)])
-//         //     .range([0, chartWidth]);
-
-//     function updateXAxes (newXScale, xAxis) {
-//         var bottomaxis = d3.axisBottom(newXScale)
-//         xAxis
-//             .transition()
-//             .duration(1500)
-//             .call(bottomaxis)
-//         return xAxis
-//     };
-
-//     function updateYAxes (newYScale, yAxis) {
-//         var leftAxis = d3.axisLeft(newYScale)
-//         yAxis
-//             .transition()
-//             .duration(1500)
-//             .call(leftAxis)
-//         return yAxis
-//     };
-
-//     function renderCircles (
-//         circlesGroup,
-//         newXScale,
-//         xValue,
-//         newYScale,
-//         yValue
-//     ) {
-//         circlesGroup.transition()
-//             .duration(1500)
-//             .attr('cx', d => newXScale(d[xValue]))
-//             .attr('cy', d => newYScale(d[yValue]))
-//         return circlesGroup;
-//     };
-
-//     function renderText (
-//         textGroup,
-//         newXScale,
-//         xValue,
-//         newYScale,
-//         yValue
-//     ) {
-//         textGroup.transition()
-//             .duration(1500)
-//             .attr('x', d=> newXScale(d[xValue]))
-//             .attr('y', d=> newYScale(d[yValue]))
-//             .attr('text-anchor', 'middle')
-//         return textGroup
-//     };
-
-//     function updateToolTip (xValue, yValue, circlesGroup, textGroup) {
-//         if (xValue === 'Median_Income') {
-//             var xLabel = 'Median Income ($)'
-//         } else if (xValue === 'Infant_Death_Rate') {
-//             var xLabel = "Infant Death Rate/1000"
-//         } else if (xValue === 'Infant_Deaths') {
-//             var xLabel = "Total Infant Deaths"
-//         } else if (xValue === "Teen_Birth_Rate") {
-//             var xLabel = "Teen Birth Rate/1000"
-//         } else if (xValue === "Unmarried_Birth_Rate") { 
-//             var xLabel = "Unmarried Birth Rate/1000"
-//         } else {
-//             xLabel = "Low Birthweight Rate/1000"
-//         }
-
-//         if (yValue === "Infant_Death_Rate") {
-//             var yLabel = "Infant Death Rate/1000"
-//         } else if (yValue === "Infant_Deaths") {
-//             var yLabel = "Total Infant Deaths"
-//         } else if (yValue === "Teen_Birth_Rate") {
-//             var yLabel = "Teen Birth Rate/1000"
-//         } else if (yValue === "Unmarried_Birth_Rate") {
-//             var yLabel = "Unmarried Birth Rate/1000"
-//         } else if (yValue === "Low_Birthweight_Rate") {
-//             var yLabel = "Low Birthweight Rate/1000"
-//         } else {
-//             yLabel = "Median Income"
-//         }
-
-//         //create tooltips
-//         var tool_tip = d3.tip()
-//             .attr('class', 'tooltip d3-tip')
-//             .offset([90, 90])
-//             .html( function(d) {
-//         return `<strong>${d.State}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
-//         })
-//     circlesGroup.call(tool_tip)
-//     circlesGroup.on('mouseover', function(data) {
-//         tool_tip.show(data, this)
-//     })
-//     .on('mouseout', function(data) {
-//         tool_tip.hide(data)
-//     })
-
-//     textGroup.call(tool_tip)
-//     textGroup.on('mouseover', function(data) {
-//         tool_tip.show(data, this)
-//     })
-//     .on('mouseout', function(data) {
-//         tool_tip.hide(data)
-//     })
-//     return circlesGroup
-//     }
-
-//     d3.json(url.combined_url).then(function(combinedData) {
-//         combinedData.forEach(function(data) {
-//             data.ID = +data.ID
-//             data.Infant_Death_Rate = +data.Infant_Death_Rate
-//             data.Infant_Deaths = +data.Infant_Deaths
-//             data.Year = +data.Year
-//             data.Median_Income = +data.Median_Income
-//             data.Teen_Birth_Rate = +data.Teen_Birth_Rate
-//             data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
-//             data.Low_Birthweight_rate = +data.Low_Birthweight_Rate
-//         })
-//         console.log(combinedData)
-
-//         var xLinearScale = xScale(combinedData, xValue)
-//         var yLinearScale = yScale(combinedData, yValue)
-
-//         var bottomAxis = d3.axisBottom(xLinearScale)
-//         var leftAxis = d3.axisLeft(yLinearScale)
-
-//         var xAxis = chartGroup.append('g')
-//             .classed('x-axis', true)
-//             .attr('transform', `translate(0, ${chartHeight})`)
-//             .call(bottomAxis)
+        var xAxis = chartGroup.append('g')
+            .classed('x-axis', true)
+            .attr('transform', `translate(0, ${chartHeight})`)
+            .call(bottomAxis)
         
-//         var yAxis = chartGroup.append('g')
-//             .classed('y-axis', true)
-//             .call(leftAxis)
+        var yAxis = chartGroup.append('g')
+            .classed('y-axis', true)
+            .call(leftAxis)
 
-//         var circlesGroup = chartGroup.selectAll(".stateCircle")
-//             .data(combinedData)
-//             .enter()
-//             .append('circle')
-//             .attr('cx', d => xLinearScale(d[xValue]))
-//             .attr('cy', d => yLinearScale(d[yValue]))
-//             .attr('class', 'stateCircle')
-//             .attr('r', 12, dy = '.4em')
-//             .attr('opacity', '0.70')
+        var circlesGroup = chartGroup.selectAll(".stateCircle")
+            .data(combinedData)
+            .enter()
+            .append('circle')
+            .attr('cx', d => xLinearScale(d[xValue]))
+            .attr('cy', d => yLinearScale(d[yValue]))
+            .attr('class', 'stateCircle')
+            .attr('r', 12, dy = '.4em')
+            .attr('opacity', '0.70')
 
-//         //     var circlesGroup = chartGroup.selectAll("circle")
-// //         .data(incomeData)
-// //         .enter()
-// //         .append("circle")
-// //         .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
-// //         .attr("cy", d => yLinearScale(d.Infant_Deaths))
-// //         .attr("r", "15")
-// //         .attr("fill", "pink")
-// //         .attr("opacity", ".5")
+        //     var circlesGroup = chartGroup.selectAll("circle")
+//         .data(incomeData)
+//         .enter()
+//         .append("circle")
+//         .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
+//         .attr("cy", d => yLinearScale(d.Infant_Deaths))
+//         .attr("r", "15")
+//         .attr("fill", "pink")
+//         .attr("opacity", ".5")
         
-//         var textGroup = chartGroup.selectAll('.stateText')
-//             .data(combinedData)
-//             .enter()
-//             .append("text")
-//             .attr('x', d=> xLinearScale(d[xValue]))
-//             .attr('y', d=> yLinearScale(d[yValue]))
-//             .text(d=> d.State)
-//             .attr("class", "stateText")
-//             .attr("font-size", "12px")
-//             .attr('text-anchor', 'middle')
-//             .attr('dy', '.3em')
+        var textGroup = chartGroup.selectAll('.stateText')
+            .data(combinedData)
+            .enter()
+            .append("text")
+            .attr('x', d=> xLinearScale(d[xValue]))
+            .attr('y', d=> yLinearScale(d[yValue]))
+            .text(d=> d.State)
+            .attr("class", "stateText")
+            .attr("font-size", "12px")
+            .attr('text-anchor', 'middle')
+            .attr('dy', '.3em')
 
-//         var xLabelsGp = chartGroup
-//             .append('g')
-//             .attr('transform', `translate(${chartWidth/2}, ${chartHeight + 20})`)
+        var xLabelsGp = chartGroup
+            .append('g')
+            .attr('transform', `translate(${chartWidth/2}, ${chartHeight + 20})`)
 
-//         var incLabel = xLabelsGp
-//             .append('text')
-//             .attr('x',0)
-//             .attr('y', 20)
-//             .attr('value', 'Median_Income')
-//             .classed('active', true)
-//             .text('Median Income ($)')
+        var incLabel = xLabelsGp
+            .append('text')
+            .attr('x',0)
+            .attr('y', 20)
+            .attr('value', 'Median_Income')
+            .classed('active', true)
+            .text('Median Income ($)')
 
-//         var idrLabel = xLabelsGp
-//             .append('text')
-//             .attr('x', 0)
-//             .attr('y', 40)
-//             // for event listenter
-//             .attr('value', 'Infant_Death_Rate')
-//             .classed('inactive', true)
-//             .text('Infant Death Rate/1000')
+        var idrLabel = xLabelsGp
+            .append('text')
+            .attr('x', 0)
+            .attr('y', 40)
+            // for event listenter
+            .attr('value', 'Infant_Death_Rate')
+            .classed('inactive', true)
+            .text('Infant Death Rate/1000')
 
-//         var tifLabel = xLabelsGp
-//             .append('text')
-//             .attr('x', 0)
-//             .attr('y', 60)
-//             .attr('value', 'Infant_Deaths')
-//             .classed('inactive', true)
-//             .text('Total Infant Deaths')
+        var tifLabel = xLabelsGp
+            .append('text')
+            .attr('x', 0)
+            .attr('y', 60)
+            .attr('value', 'Infant_Deaths')
+            .classed('inactive', true)
+            .text('Total Infant Deaths')
 
-//         var tbrLabel = xLabelsGp
-//             .append('text')
-//             .attr('x', 0)
-//             .attr('y', 80)
-//             .attr('value', 'Teen_Birth_Rate')
-//             .classed('inactive', true)
-//             .text('Teen Birth Rate/1000')
+        var tbrLabel = xLabelsGp
+            .append('text')
+            .attr('x', 0)
+            .attr('y', 80)
+            .attr('value', 'Teen_Birth_Rate')
+            .classed('inactive', true)
+            .text('Teen Birth Rate/1000')
 
-//         var ubrLabel = xLabelsGp
-//             .append('text')
-//             .attr('x', 0)
-//             .attr('y', 100)
-//             .attr('value', 'Unmarried_Birth_Rate')
-//             .classed('inactive', true)
-//             .text('Unmarried Birth Rate/1000')
+        var ubrLabel = xLabelsGp
+            .append('text')
+            .attr('x', 0)
+            .attr('y', 100)
+            .attr('value', 'Unmarried_Birth_Rate')
+            .classed('inactive', true)
+            .text('Unmarried Birth Rate/1000')
 
-//         var lbwLabel = xLabelsGp
-//             .append('text')
-//             .attr('x', 0)
-//             .attr('y', 120)
-//             .attr('value', 'Low_Birthweight')
-//             .classed('inactive', true)
-//             .text('Low Birthweight Rate/1000')
-
-
-//             // y axis gps
-//             var yLabelsGp = chartGroup
-//             .append('g')
-//             .attr('transform', `translate(-20, ${chartHeight / 2})`)
-
-//             // Append yAxis
-//         var idryLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -30)
-//             .attr('x', 0)
-//             .attr('value', 'Infant_Death_Rate')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('active', true)
-//             .text('Infant Death Rate/1000')
-
-//         var tidyLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -50)
-//             .attr('x', 0)
-//             .attr('value', 'Infant_Deaths')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('inactive', true)
-//             .text('Total Infant Deaths')
-
-//         var tbryLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -70)
-//             .attr('x', 0)
-//             .attr('value', 'Teen_Birth_Rate')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('inactive', true)
-//             .text('Teen Birth Rate/1000')
-
-//         var ubryLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -90)
-//             .attr('x', 0)
-//             .attr('value', 'Unmarried_Birth_Rate')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('inactive', true)
-//             .text('Unmarried Birth Rate/1000')
-
-//         var lbryLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -110)
-//             .attr('x', 0)
-//             .attr('value', 'Low_Birthweight_Rate')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('inactive', true)
-//             .text('Low Birthweight Rate/1000')
-
-//         var incyLabel = yLabelsGp
-//             .append('text')
-//             .attr('transform', 'rotate(-90)')
-//             .attr('y', -130)
-//             .attr('x', 0)
-//             .attr('value', 'Income')
-//             .attr('dy', '1em')
-//             .classed('axis-text', true)
-//             .classed('inactive', true)
-//             .text('Median Income')
+        var lbwLabel = xLabelsGp
+            .append('text')
+            .attr('x', 0)
+            .attr('y', 120)
+            .attr('value', 'Low_Birthweight')
+            .classed('inactive', true)
+            .text('Low Birthweight Rate/1000')
 
 
-//         var circlesGroup = updateToolTip(xValue, yValue, circlesGroup, textGroup)
+            // y axis gps
+            var yLabelsGp = chartGroup
+            .append('g')
+            .attr('transform', `translate(-20, ${chartHeight / 2})`)
 
-//         xLabelsGp.selectAll('text').on('click', function () {
-//         var value = d3.select(this).attr('value')
-//         if (value !== xValue) {
-//           xValue = value
-//           xLinearScale = xScale(combinedData, xValue)
-//           xAxis = updateXAxes(xLinearScale, xAxis)
+            // Append yAxis
+        var idryLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -30)
+            .attr('x', 0)
+            .attr('value', 'Infant_Death_Rate')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('active', true)
+            .text('Infant Death Rate/1000')
+
+        var tidyLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -50)
+            .attr('x', 0)
+            .attr('value', 'Infant_Deaths')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('inactive', true)
+            .text('Total Infant Deaths')
+
+        var tbryLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -70)
+            .attr('x', 0)
+            .attr('value', 'Teen_Birth_Rate')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('inactive', true)
+            .text('Teen Birth Rate/1000')
+
+        var ubryLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -90)
+            .attr('x', 0)
+            .attr('value', 'Unmarried_Birth_Rate')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('inactive', true)
+            .text('Unmarried Birth Rate/1000')
+
+        var lbryLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -110)
+            .attr('x', 0)
+            .attr('value', 'Low_Birthweight_Rate')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('inactive', true)
+            .text('Low Birthweight Rate/1000')
+
+        var incyLabel = yLabelsGp
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -130)
+            .attr('x', 0)
+            .attr('value', 'Income')
+            .attr('dy', '1em')
+            .classed('axis-text', true)
+            .classed('inactive', true)
+            .text('Median Income')
 
 
-//         circlesGroup = renderCircles(
-//           circlesGroup,
-//           xLinearScale,
-//           xValue,
-//           yLinearScale,
-//           yValue
-//         )
+        var circlesGroup = updateToolTip(xValue, yValue, circlesGroup, textGroup)
 
-//         textGroup = renderText(
-//           textGroup,
-//           xLinearScale,
-//           xValue,
-//           yLinearScale,
-//           yValue
-//         )
+        xLabelsGp.selectAll('text').on('click', function () {
+        var value = d3.select(this).attr('value')
+        if (value !== xValue) {
+          xValue = value
+          xLinearScale = xScale(combinedData, xValue)
+          xAxis = updateXAxes(xLinearScale, xAxis)
 
-//         circlesGroup = updateToolTip(
-//           xValue,
-//           yValue,
-//           circlesGroup,
-//           textGroup
-//         )
 
-//         if (xValue === 'Median_Income') {
-//             incLabel.classed('active', true).classed('inactive', false)
-//             idrLabel.classed('active', false).classed('inactive', true)
-//             tifLabel.classed('active', false).classed('inactive', true)
-//             tbrLabel.classed('active', false).classed('inactive', true)
-//             ubrLabel.classed('active', false).classed('inactive', true)
-//             lbwLabel.classed('active', false).classed('inactive', true)
+        circlesGroup = renderCircles(
+          circlesGroup,
+          xLinearScale,
+          xValue,
+          yLinearScale,
+          yValue
+        )
 
-//         } else if (xValue === 'Infant_Death_Rate') {
-//             incLabel.classed('active', false).classed('inactive', true)
-//             idrLabel.classed('active', true).classed('inactive', false)
-//             tifLabel.classed('active', false).classed('inactive', true)
-//             tbrLabel.classed('active', false).classed('inactive', true)
-//             ubrLabel.classed('active', false).classed('inactive', true)
-//             lbwLabel.classed('active', false).classed('inactive', true)
+        textGroup = renderText(
+          textGroup,
+          xLinearScale,
+          xValue,
+          yLinearScale,
+          yValue
+        )
 
-//         } else if (xValue === 'Infant_Deaths') {
-//             incLabel.classed('active', false).classed('inactive', true)
-//             idrLabel.classed('active', false).classed('inactive', true)
-//             tifLabel.classed('active', true).classed('inactive', false)
-//             tbrLabel.classed('active', false).classed('inactive', true)
-//             ubrLabel.classed('active', false).classed('inactive', true)
-//             lbwLabel.classed('active', false).classed('inactive', true)
+        circlesGroup = updateToolTip(
+          xValue,
+          yValue,
+          circlesGroup,
+          textGroup
+        )
 
-//         } else if (xValue === 'Teen_Birth_Rate') {
-//             incLabel.classed('active', false).classed('inactive', true)
-//             idrLabel.classed('active', false).classed('inactive', true)
-//             tifLabel.classed('active', false).classed('inactive', true)
-//             tbrLabel.classed('active', true).classed('inactive', false)
-//             ubrLabel.classed('active', false).classed('inactive', true)
-//             lbwLabel.classed('active', false).classed('inactive', true)
+        if (xValue === 'Median_Income') {
+            incLabel.classed('active', true).classed('inactive', false)
+            idrLabel.classed('active', false).classed('inactive', true)
+            tifLabel.classed('active', false).classed('inactive', true)
+            tbrLabel.classed('active', false).classed('inactive', true)
+            ubrLabel.classed('active', false).classed('inactive', true)
+            lbwLabel.classed('active', false).classed('inactive', true)
 
-//         } else if (xValue === 'Unmarried_Birth_Rate') {
-//             incLabel.classed('active', false).classed('inactive', true)
-//             idrLabel.classed('active', false).classed('inactive', true)
-//             tifLabel.classed('active', false).classed('inactive', true)
-//             tbrLabel.classed('active', false).classed('inactive', true)
-//             ubrLabel.classed('active', true).classed('inactive', false)
-//             lbwLabel.classed('active', false).classed('inactive', true)
+        } else if (xValue === 'Infant_Death_Rate') {
+            incLabel.classed('active', false).classed('inactive', true)
+            idrLabel.classed('active', true).classed('inactive', false)
+            tifLabel.classed('active', false).classed('inactive', true)
+            tbrLabel.classed('active', false).classed('inactive', true)
+            ubrLabel.classed('active', false).classed('inactive', true)
+            lbwLabel.classed('active', false).classed('inactive', true)
+
+        } else if (xValue === 'Infant_Deaths') {
+            incLabel.classed('active', false).classed('inactive', true)
+            idrLabel.classed('active', false).classed('inactive', true)
+            tifLabel.classed('active', true).classed('inactive', false)
+            tbrLabel.classed('active', false).classed('inactive', true)
+            ubrLabel.classed('active', false).classed('inactive', true)
+            lbwLabel.classed('active', false).classed('inactive', true)
+
+        } else if (xValue === 'Teen_Birth_Rate') {
+            incLabel.classed('active', false).classed('inactive', true)
+            idrLabel.classed('active', false).classed('inactive', true)
+            tifLabel.classed('active', false).classed('inactive', true)
+            tbrLabel.classed('active', true).classed('inactive', false)
+            ubrLabel.classed('active', false).classed('inactive', true)
+            lbwLabel.classed('active', false).classed('inactive', true)
+
+        } else if (xValue === 'Unmarried_Birth_Rate') {
+            incLabel.classed('active', false).classed('inactive', true)
+            idrLabel.classed('active', false).classed('inactive', true)
+            tifLabel.classed('active', false).classed('inactive', true)
+            tbrLabel.classed('active', false).classed('inactive', true)
+            ubrLabel.classed('active', true).classed('inactive', false)
+            lbwLabel.classed('active', false).classed('inactive', true)
     
 
-//         } else {
-//             incLabel.classed('active', false).classed('inactive', true)
-//             idrLabel.classed('active', false).classed('inactive', true)
-//             tifLabel.classed('active', false).classed('inactive', true)
-//             tbrLabel.classed('active', false).classed('inactive', true)
-//             ubrLabel.classed('active', false).classed('inactive', true)
-//             lbwLabel.classed('active', true).classed('inactive', false)
+        } else {
+            incLabel.classed('active', false).classed('inactive', true)
+            idrLabel.classed('active', false).classed('inactive', true)
+            tifLabel.classed('active', false).classed('inactive', true)
+            tbrLabel.classed('active', false).classed('inactive', true)
+            ubrLabel.classed('active', false).classed('inactive', true)
+            lbwLabel.classed('active', true).classed('inactive', false)
 
-//         }
-//       }
+        }
+      }
       
-//     })
+    })
     
-//     yLabelsGp.selectAll('text').on('click', function () {
-//     var value = d3.select(this).attr('value')
+    yLabelsGp.selectAll('text').on('click', function () {
+    var value = d3.select(this).attr('value')
 
-//     if (value !== yValue) {
-//         yValue = value
+    if (value !== yValue) {
+        yValue = value
 
-//         yLinearScale = yScale(combineData, yValue)
+        yLinearScale = yScale(combineData, yValue)
 
-//         yAxis = updateYAxes(yLinearScale, yAxis)
+        yAxis = updateYAxes(yLinearScale, yAxis)
 
-//         circlesGroup = renderCircles(
-//             circlesGroup,
-//             xLinearScale,
-//             xValue,
-//             yLinearScale,
-//             yValue
-//         )
-//         // Updates Text with New Values
-//         textGroup = renderText(
-//             textGroup,
-//             xLinearScale,
-//             xValue,
-//             yLinearScale,
-//             yValue
-//         )
-//         // Updates Tooltips with New Information
-//         circlesGroup = updateToolTip(
-//             xValue, 
-//             yValue, 
-//             circlesGroup, 
-//             textGroup)
+        circlesGroup = renderCircles(
+            circlesGroup,
+            xLinearScale,
+            xValue,
+            yLinearScale,
+            yValue
+        )
+        // Updates Text with New Values
+        textGroup = renderText(
+            textGroup,
+            xLinearScale,
+            xValue,
+            yLinearScale,
+            yValue
+        )
+        // Updates Tooltips with New Information
+        circlesGroup = updateToolTip(
+            xValue, 
+            yValue, 
+            circlesGroup, 
+            textGroup)
 
-//                 if (yValue === 'Median_Income') {
-//             incyLabel.classed('active', true).classed('inactive', false)
-//             idryLabel.classed('active', false).classed('inactive', true)
-//             tifyLabel.classed('active', false).classed('inactive', true)
-//             tbryLabel.classed('active', false).classed('inactive', true)
-//             ubryLabel.classed('active', false).classed('inactive', true)
-//             lbwyLabel.classed('active', false).classed('inactive', true)
-//             } else if (yValue === 'Infant_Death_Rate') {
-//             incyLabel.classed('active', false).classed('inactive', true)
-//             idryLabel.classed('active', true).classed('inactive', false)
-//             tifyLabel.classed('active', false).classed('inactive', true)
-//             tbryLabel.classed('active', false).classed('inactive', true)
-//             ubryLabel.classed('active', false).classed('inactive', true)
-//             lbwyLabel.classed('active', false).classed('inactive', true)
-//             } else if (yValue === 'Infant_Deaths') {
-//             incyLabel.classed('active', false).classed('inactive', true)
-//             idryLabel.classed('active', false).classed('inactive', true)
-//             tifyLabel.classed('active', true).classed('inactive', false)
-//             tbryLabel.classed('active', false).classed('inactive', true)
-//             ubryLabel.classed('active', false).classed('inactive', true)
-//             lbwyLabel.classed('active', false).classed('inactive', true)
-//             } else if (yValue === 'Teen_Birth_Rate') {
-//             incyLabel.classed('active', false).classed('inactive', true)
-//             idryLabel.classed('active', false).classed('inactive', true)
-//             tifyLabel.classed('active', false).classed('inactive', true)
-//             tbryLabel.classed('active', true).classed('inactive', false)
-//             ubryLabel.classed('active', false).classed('inactive', true)
-//             lbwyLabel.classed('active', false).classed('inactive', true)
-//             } else if (yValue === 'Unmarried_Birth_Rate') {
-//             incyLabel.classed('active', false).classed('inactive', true)
-//             idryLabel.classed('active', false).classed('inactive', true)
-//             tifyLabel.classed('active', false).classed('inactive', true)
-//             tbryLabel.classed('active', false).classed('inactive', true)
-//             ubryLabel.classed('active', true).classed('inactive', false)
-//             lbwyLabel.classed('active', false).classed('inactive', true)
-//             } else {
-//             incyLabel.classed('active', false).classed('inactive', true)
-//             idryLabel.classed('active', false).classed('inactive', true)
-//             tifyLabel.classed('active', false).classed('inactive', true)
-//             tbryLabel.classed('active', false).classed('inactive', true)
-//             ubryLabel.classed('active', false).classed('inactive', true)
-//             lbwyLabel.classed('active', true).classed('inactive', false)
-//             }
+                if (yValue === 'Median_Income') {
+            incyLabel.classed('active', true).classed('inactive', false)
+            idryLabel.classed('active', false).classed('inactive', true)
+            tifyLabel.classed('active', false).classed('inactive', true)
+            tbryLabel.classed('active', false).classed('inactive', true)
+            ubryLabel.classed('active', false).classed('inactive', true)
+            lbwyLabel.classed('active', false).classed('inactive', true)
+            } else if (yValue === 'Infant_Death_Rate') {
+            incyLabel.classed('active', false).classed('inactive', true)
+            idryLabel.classed('active', true).classed('inactive', false)
+            tifyLabel.classed('active', false).classed('inactive', true)
+            tbryLabel.classed('active', false).classed('inactive', true)
+            ubryLabel.classed('active', false).classed('inactive', true)
+            lbwyLabel.classed('active', false).classed('inactive', true)
+            } else if (yValue === 'Infant_Deaths') {
+            incyLabel.classed('active', false).classed('inactive', true)
+            idryLabel.classed('active', false).classed('inactive', true)
+            tifyLabel.classed('active', true).classed('inactive', false)
+            tbryLabel.classed('active', false).classed('inactive', true)
+            ubryLabel.classed('active', false).classed('inactive', true)
+            lbwyLabel.classed('active', false).classed('inactive', true)
+            } else if (yValue === 'Teen_Birth_Rate') {
+            incyLabel.classed('active', false).classed('inactive', true)
+            idryLabel.classed('active', false).classed('inactive', true)
+            tifyLabel.classed('active', false).classed('inactive', true)
+            tbryLabel.classed('active', true).classed('inactive', false)
+            ubryLabel.classed('active', false).classed('inactive', true)
+            lbwyLabel.classed('active', false).classed('inactive', true)
+            } else if (yValue === 'Unmarried_Birth_Rate') {
+            incyLabel.classed('active', false).classed('inactive', true)
+            idryLabel.classed('active', false).classed('inactive', true)
+            tifyLabel.classed('active', false).classed('inactive', true)
+            tbryLabel.classed('active', false).classed('inactive', true)
+            ubryLabel.classed('active', true).classed('inactive', false)
+            lbwyLabel.classed('active', false).classed('inactive', true)
+            } else {
+            incyLabel.classed('active', false).classed('inactive', true)
+            idryLabel.classed('active', false).classed('inactive', true)
+            tifyLabel.classed('active', false).classed('inactive', true)
+            tbryLabel.classed('active', false).classed('inactive', true)
+            ubryLabel.classed('active', false).classed('inactive', true)
+            lbwyLabel.classed('active', true).classed('inactive', false)
+            }
 
-//     }
-//   })
-
-
+    }
+  })
 
 
 
-//   })
-// };
-// responsiveWrapper()
+
+
+  })
+};
+responsiveWrapper()
 // d3.select(window).on('resize', makeResponsive)
 
  

@@ -35,7 +35,7 @@ teen_2018 = Base.classes.teen2018
 
 unmarried_2018 = Base.classes.unmarried2018
 
-combined = Base.classes.combined
+combined = Base.classes.combined2
 
 # create an app, pass __name__
 app = Flask(__name__)
@@ -62,12 +62,12 @@ def view1():
 def combined_df():
     session = Session(engine)
 
-    results = session.query(combined.ID, combined.State, combined.Infant_Death_Per_1000, combined.Infant_Deaths, combined.Year, combined.Median_Income, combined.Teen_Birth_Rate_Per_1000, combined.Unmarried_Birth_Rate, combined.Low_Birthweight_Rate)
+    results = session.query(combined.ID, combined.State, combined.Infant_Death_Per_1000, combined.Infant_Deaths, combined.Year, combined.Median_Income, combined.Teen_Birth_Rate_Per_1000)
 
     session.close()
 
     combined_info = []
-    for ID, State, Infant_Death_Per_1000, Infant_Deaths, Year, Median_Income, Teen_Birth_Rate_Per_1000, Unmarried_Birth_Rate, Low_Birthweight_Rate in results:
+    for ID, State, Infant_Death_Per_1000, Infant_Deaths, Year, Median_Income, Teen_Birth_Rate_Per_1000 in results:
         combined_dict = {}
         combined_dict["ID"] = ID,
         combined_dict["State"] = State,
@@ -76,8 +76,8 @@ def combined_df():
         combined_dict["Year"] = Year,
         combined_dict["Median_Income"] = Median_Income,
         combined_dict["Teen_Birth_Rate"] = Teen_Birth_Rate_Per_1000,
-        combined_dict["Unmarried_Birth_Rate"] = Unmarried_Birth_Rate,
-        combined_dict["Low_Birthweight_Rate"] = Low_Birthweight_Rate
+        # combined_dict["Unmarried_Birth_Rate"] = Unmarried_Birth_Rate,
+        # combined_dict["Low_Birthweight_Rate"] = Low_Birthweight_Rate
         combined_info.append(combined_dict)
     return jsonify(combined_info)
 
