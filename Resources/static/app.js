@@ -355,8 +355,10 @@ function responsiveWrapper() {
             .attr("class", "stateText")
             .attr("font-size", "12px")
             .attr('text-anchor', 'middle')
-            .attr('fill', 'grey')
-        var xLabelsGp = chartGroup.append('g')
+            .attr('dy', '.3em')
+
+        var xLabelsGp = chartGroup
+            .append('g')
             .attr('transform', `translate(${chartWidth/2}, ${chartHeight + 20})`)
 
         var povLabel = xLabelsGp
