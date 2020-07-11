@@ -1,4 +1,4 @@
-const url = {
+var url = {
     infant_url: "http://127.0.0.1:5000/api/v1.0/infants",
     birthweight_url: "http://127.0.0.1:5000/api/v1.0/birthweight",
     teen_url: "http://127.0.0.1:5000/api/v1.0/teen",
