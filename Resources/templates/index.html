@@ -96,21 +96,25 @@
             
               <div class="child" id="map">
 
-                <script type="text/javascript" src="../static/app.js"></script>
+                <script type="text/javascript" src="STATES.js"></script>
 
                 <script type="text/javascript">
-                var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-                });
-                var map = L.map('map')
-                    .addLayer(mapboxTiles)
-                    .setView([40.5, -96.5], 4);
+                
+                // Add map
+                var map = L.map('map').setView([37.8, -96], 4);
 
-                var statesLayer = L.geoJson(statesData).addTo(map);
+                L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                    maxZoom: 10,
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    id: 'mapbox/light-v9',
+                    tileSize: 512,
+                    zoomOffset: -1
+                }).addTo(map);
 
-                map.fitbounds(statesLayer);
 
-                // Hover TEST
+                // Add hover
                 var info = L.control();
 
                 info.onAdd = function (map) {
@@ -119,16 +123,52 @@
                     return this._div;
                 };
 
+                info.update = function (props) {
+                    this._div.innerHTML = '<h3><b>Infant Mortality Rates in the USA</b></h3>' +  (props ?
+                        '<b><font size="+1">' + props.name + '</b></font size="+1"><br/><i>' + '<b>' + props.rate + '</b>' + '<b> deaths per 1,000 infants </b>' +  '<br /></i>' + 
+                        props.lowbw + ' low birthweights per 1,000 women' + '<br />' + 
+                        props.teen + ' teen births per 1,000 women' + '<br />' +
+                        props.un + ' unmarried mothers per 1,000 women'
+                        : 'Hover over a state');
+                };
+
                 info.addTo(map);
 
-                // Making map interactive
+
+                // Color depending on rate value
+                function getColor(d) {
+                    return d > 9 ? '#2820D7' :
+                            d > 8  ? '#2047D7' :
+                            d > 7  ? '#2065D7' :
+                            d > 6  ? '#2084D7' :
+                            d > 5  ? '#20A8D7' :
+                            d > 4  ? '#20BED7' :
+                            d > 3  ? '#20CCD7' :
+                            d > 2  ? '#20D7C6' :
+                            d > 1  ? '#20D7AD' :
+                            d > 0  ? '#20D78F' :
+                                    '#20D78F' ;
+                }
+
+                function style(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.rate)
+                    };
+                }
+
+                // Add interaction
                 function highlightFeature(e) {
                     var layer = e.target;
 
                     layer.setStyle({
                         weight: 5,
-                        color: '#667',
-                        dashArray: '',
+                        color: '#666',
+                        dashArray: '3',
                         fillOpacity: 0.7
                     });
 
@@ -136,20 +176,21 @@
                         layer.bringToFront();
                     }
 
-                function resetHighlight(e) {
-                    statesLayer.resetStyle(e.target);
-                    }
-                    }
+                    info.update(layer.feature.properties);
+                }
 
-                // var geojson;
-                // // ... our listeners
-                // geojson = L.geoJson(allstates);
+                var geojson;
+
+                function resetHighlight(e) {
+                    geojson.resetStyle(e.target);
+                    info.update();
+                }
 
                 function zoomToFeature(e) {
                     map.fitBounds(e.target.getBounds());
-                    }
+                }
 
-                function OnEachFeature(feature, layer) {
+                function onEachFeature(feature, layer) {
                     layer.on({
                         mouseover: highlightFeature,
                         mouseout: resetHighlight,
@@ -163,6 +204,46 @@
                 }).addTo(map);
 
                 </script>
+              </div>
+
+              <div id="state-legend" class="legend">
+                <h4><a style="color:white;">Infant Mortality Rate Legend</a></h4>
+                <div><span style="background-color: #20D78F"></span><a style="color:white;">0-1</a></div>
+                <div><span style="background-color: #20D7AD"></span><a style="color:white;">1-2</a></div>
+                <div><span style="background-color: #20D7C6"></span><a style="color:white;">2-3</a></div>
+                <div><span style="background-color: #20CCD7"></span><a style="color:white;">3-4</a></div>
+                <div><span style="background-color: #20BED7"></span><a style="color:white;">4-5</a></div>
+                <div><span style="background-color: #20A8D7"></span><a style="color:white;">5-6</a></div>
+                <div><span style="background-color: #2084D7"></span><a style="color:white;">6-7</a></div>
+                <div><span style="background-color: #2065D7"></span><a style="color:white;">7-8</a></div>
+                <div><span style="background-color: #2047D7"></span><a style="color:white;">8-9</a></div>
+                <div><span style="background-color: #2820D7"></span><a style="color:white;">9-10</a></div>
+
+                <style>
+                    .legend {
+                    background-color: rgb(0, 0, 0);
+                    border-radius: 3px;
+                    bottom: 30px;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+                    padding: 10px;
+                    position: bottom;
+                    right: 10px;
+                    z-index: 1;
+                    }
+                    
+                    .legend h4 {
+                    margin: 0 0 10px;
+                    }
+                    
+                    .legend div span {
+                    border-radius: 50%;
+                    display: inline-block;
+                    height: 10px;
+                    margin-right: 5px;
+                    width: 10px;
+                    }
+                </style>
               </div>
 
               <div class="twins">
