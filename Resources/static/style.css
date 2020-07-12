@@ -1,10 +1,10 @@
 body {
-    background-color: black;
+    background-color: #D7CEC7;
 }
 
 .parent {
   width: 100%;
-  border: 2px solid grey;
+  border: 2px solid #C09F80;
   float: left;
   padding: 6px;
 }
@@ -12,14 +12,14 @@ body {
 .child {
   width: 80%;
   padding: 5%;
-  border: 1px solid grey;
+  border: 1px solid #C09F80;
   margin: 0.2em auto;
 }
 
 .twins {
   width: 50%;
   padding: 1em;
-  border: 1px solid grey;
+  border: 1px solid #C09F80;
   float: left;
 }
 
@@ -33,18 +33,18 @@ body {
 h3 {
     font-size: x-large;
     font-weight: bold;
-    color: rgb(158, 158, 141);
+    color: #76323F;
 }
 
 h5 {
   font-size: x-small;
   font-weight: bold;
-  color: dimgrey;
+  color: #565656;
 }
 
 p {
-    font-size: small;
-    color: grey;
+    font-size: medium;
+    color: #565656);
 }
 
 .navbar-brand {
@@ -62,7 +62,7 @@ p {
 
 #map {
   border:3em;
-  color: grey;
+  color: #C09F80;
   width: 900px;
   height: 700px;
 }
@@ -71,3 +71,6 @@ button {
   width: 100px;
 }
 
+#state-legend {
+  background-color: #D7CEC7
+}
