@@ -13,13 +13,13 @@
 
 .inactive {
   font-weight: lighter;
-  fill: #d4c7a8;
+  fill: rgb(105, 103, 92);
   transition: fill 0.3s ease-out;
   text-anchor: middle;
 }
 
 .inactive:hover {
-  fill: rgb(112, 107, 78);
+  fill: rgb(19, 182, 223);
   cursor: pointer;
 }
 

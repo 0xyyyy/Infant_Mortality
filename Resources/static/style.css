@@ -1,17 +1,23 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
 body {
     background-color: black;
 }
 
 .parent {
   width: 100%;
-  border: 2px solid grey;
+  border: 0px solid grey;
   float: left;
   padding: 6px;
+  background: blanchedalmond
 }
 
 .child {
-  width: 80%;
-  padding: 5%;
+  width: 100%;
+  padding: 0%;
   border: 1px solid grey;
   margin: 0.2em auto;
 }
@@ -33,7 +39,7 @@ body {
 h3 {
     font-size: x-large;
     font-weight: bold;
-    color: rgb(158, 158, 141);
+    color: rgb(78, 47, 47);
 }
 
 h5 {
@@ -44,7 +50,7 @@ h5 {
 
 p {
     font-size: small;
-    color: grey;
+    color: rgb(78, 47, 47);
 }
 
 .navbar-brand {
@@ -69,5 +75,14 @@ p {
 
 button {
   width: 100px;
+}
+
+nav .navbar-nav li a {
+  color: rgb(78, 47, 47) !important;
+
+}
+
+.navbar {
+  background: blanchedalmond;
 }
 
