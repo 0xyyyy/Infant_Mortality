@@ -271,7 +271,7 @@ function responsiveWrapper() {
         svgArea.remove()
     }
     //Define SVG area dimensions
-    var svgWidth = 980
+    var svgWidth = 780
     var svgHeight = 620 
 
     var chartMargin = {
