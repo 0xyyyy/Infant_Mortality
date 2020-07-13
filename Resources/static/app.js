@@ -294,25 +294,54 @@ function responsiveWrapper () {
   var xValue = 'Median_Income'
   var yValue = 'Infant_Death_Rate'
   // function to update xScale labels when clicked
-  function xScale (combinedData, xValue) {
-    // func to set the x axis scale of the chart
-    var xLinearScale = d3
-      .scaleLinear()
-      .domain([
-        d3.min(combinedData, d => d[xValue]) * 0.5,
-        d3.max(combinedData, d => d[xValue])
-      ])
-      .range([0, chartWidth])
-    return xLinearScale
-  }
+//   function xScale (combinedData, xValue) {
+//     // func to set the x axis scale of the chart
+//     var xLinearScale = d3
+//       .scaleLinear()
+//       .domain([
+//         d3.min(combinedData, d => d[xValue]) * 0.5,
+//         d3.max(combinedData, d => d[xValue])
+//       ])
+//       .range([0, chartWidth])
+//     return xLinearScale
+//   }
 
-  function yScale (combinedData, yValue) {
-    var yLinearScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(combinedData, d => d[yValue])])
-      .range([chartHeight, 0])
-    return yLinearScale
-  }
+//   function yScale (combinedData, yValue) {
+//     var yLinearScale = d3
+//       .scaleLinear()
+//       .domain([0, d3.max(combinedData, d => d[yValue])])
+//       .range([chartHeight, 0])
+//     return yLinearScale
+//   }
+
+
+
+// func to update xScale labels when clicked
+function xScale (healthData, xValue) {
+  // func to set the x axis scale of the chart
+  var xLinearScale = d3
+    .scaleLinear()
+    .domain([
+      d3.min(healthData, d => d[xValue]) * .5,
+      d3.max(healthData, d => d[xValue]) * 1.0
+    ])
+    .range([0, chartWidth])
+  return xLinearScale
+}
+
+// func to update yScale labels when clicked
+function yScale (healthData, yValue) {
+  // func to set the y axis scale of the chart
+  var yLinearScale = d3
+    .scaleLinear()
+    .domain([
+      d3.min(healthData, d => d[yValue]) * .5,
+      d3.max(healthData, d => d[yValue]) * 1.0
+    ])
+    .range([chartHeight, 0])
+  return yLinearScale
+}
+
 
   // var yLinearScale = d3.scaleLinear()
   //     .domain([0, d3.max(incomeData, d => d.Infant_Deaths)])

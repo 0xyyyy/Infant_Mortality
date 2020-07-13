@@ -75,7 +75,21 @@ p {
 
 button {
   width: 100px;
+  
 }
+
+.nav-item {
+  transition-duration: 0.4s;
+}
+
+.nav-item:hover {
+  background-color: rosybrown; 
+  /* color: indianred; */
+}
+
+
+
+
 
 nav .navbar-nav li a {
   color: rgb(78, 47, 47) !important;
