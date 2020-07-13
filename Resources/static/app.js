@@ -269,7 +269,7 @@ function responsiveWrapper() {
     // clear svg
     if (!svgArea.empty()) {
         svgArea.remove()
-    }
+    };
     //Define SVG area dimensions
     var svgWidth = 980
     var svgHeight = 620 
@@ -283,12 +283,14 @@ function responsiveWrapper() {
     var chartWidth = svgWidth - chartMargin.left - chartMargin.right
     var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom
 
-    var svg = d3.select('#scatter')
+    var svg = d3
+        .select('#scatter')
         .append('svg')
         .attr('height', svgHeight)
         .attr('width', svgWidth)
 
-    var chartGroup = svg.append('g')
+    var chartGroup = svg
+        .append('g')
         .attr('transform', `translate(${chartMargin.left}, ${chartMargin.top})`);
 
     var xValue = 'Median_Income';
@@ -296,15 +298,21 @@ function responsiveWrapper() {
     // function to update xScale labels when clicked
     function xScale(combinedData, xValue) {
         // func to set the x axis scale of the chart
-        var xLinearScale = d3.scaleLinear()
-            .domain([d3.min(combinedData, d => d[xValue]) * 0.5,d3.max(combinedData, d => d[xValue])])
+        var xLinearScale = d3
+            .scaleLinear()
+            .domain([
+                d3.min(combinedData, d => d[xValue]) * 0.5,
+                d3.max(combinedData, d => d[xValue]) * 1.0])
             .range([0, chartWidth])
         return xLinearScale;
     };
 
     function yScale(combinedData, yValue) {
-        var yLinearScale = d3.scaleLinear()
-            .domain([0, d3.max(combinedData, d => d[yValue])])
+        var yLinearScale = d3
+            .scaleLinear()
+            .domain([
+                d3.min(combinedData, d => d[yValue]) * 0.5,
+                d3.max(combinedData, d => d[yValue]) * 1.0 ])
             .range([chartHeight, 0])
         return yLinearScale;
     };
@@ -319,7 +327,7 @@ function responsiveWrapper() {
             .transition()
             .duration(1500)
             .call(bottomaxis)
-        return xAxis
+        return xAxis;
     };
 
     function updateYAxes (newYScale, yAxis) {
@@ -328,7 +336,7 @@ function responsiveWrapper() {
             .transition()
             .duration(1500)
             .call(leftAxis)
-        return yAxis
+        return yAxis;
     };
 
     function renderCircles (
@@ -338,7 +346,8 @@ function responsiveWrapper() {
         newYScale,
         yValue
     ) {
-        circlesGroup.transition()
+        circlesGroup
+            .transition()
             .duration(1500)
             .attr('cx', d => newXScale(d[xValue]))
             .attr('cy', d => newYScale(d[yValue]))
@@ -352,12 +361,13 @@ function responsiveWrapper() {
         newYScale,
         yValue
     ) {
-        textGroup.transition()
+        textGroup
+            .transition()
             .duration(1500)
             .attr('x', d=> newXScale(d[xValue]))
             .attr('y', d=> newYScale(d[yValue]))
             .attr('text-anchor', 'middle')
-        return textGroup
+        return textGroup;
     };
 
     function updateToolTip (xValue, yValue, circlesGroup, textGroup) {
@@ -394,25 +404,27 @@ function responsiveWrapper() {
             .attr('class', 'tooltip d3-tip')
             .offset([90, 90])
             .html( function(d) {
-        return `<strong>${d.State}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
-        })
-    circlesGroup.call(tool_tip)
-    circlesGroup.on('mouseover', function(data) {
-        tool_tip.show(data, this)
-    })
-    .on('mouseout', function(data) {
-        tool_tip.hide(data)
-    })
+            return `<strong>${d.State}</strong><br>${xLabel} ${d[xValue]}<br>${yLabel} ${d[yValue]}`
+            })
+        circlesGroup.call(tool_tip)
+        circlesGroup
+            .on('mouseover', function(data) {
+            tool_tip.show(data, this)
+            })
+            .on('mouseout', function(data) {
+            tool_tip.hide(data)
+            })
 
-    textGroup.call(tool_tip)
-    textGroup.on('mouseover', function(data) {
-        tool_tip.show(data, this)
-    })
-    .on('mouseout', function(data) {
-        tool_tip.hide(data)
-    })
-    return circlesGroup
-    }
+        textGroup.call(tool_tip)
+        textGroup
+            .on('mouseover', function(data) {
+            tool_tip.show(data, this)
+            })
+            .on('mouseout', function(data) {
+            tool_tip.hide(data)
+            })
+        return circlesGroup
+    };
 
     d3.json(url.combined_url).then(function(combinedData) {
         combinedData.forEach(function(data) {
@@ -425,7 +437,7 @@ function responsiveWrapper() {
             data.Unmarried_Birth_Rate = +data.Unmarried_Birth_Rate
             data.Low_Birthweight_rate = +data.Low_Birthweight_Rate
         })
-        console.log(combinedData)
+        console.log(combinedData);
 
         var xLinearScale = xScale(combinedData, xValue)
         var yLinearScale = yScale(combinedData, yValue)
@@ -433,36 +445,40 @@ function responsiveWrapper() {
         var bottomAxis = d3.axisBottom(xLinearScale)
         var leftAxis = d3.axisLeft(yLinearScale)
 
-        var xAxis = chartGroup.append('g')
+        var xAxis = chartGroup
+            .append('g')
             .classed('x-axis', true)
             .attr('transform', `translate(0, ${chartHeight})`)
             .call(bottomAxis)
         
-        var yAxis = chartGroup.append('g')
+        var yAxis = chartGroup
+            .append('g')
             .classed('y-axis', true)
             .call(leftAxis)
 
-        var circlesGroup = chartGroup.selectAll(".stateCircle")
+        var circlesGroup = chartGroup
+            .selectAll(".stateCircle")
             .data(combinedData)
             .enter()
             .append('circle')
             .attr('cx', d => xLinearScale(d[xValue]))
             .attr('cy', d => yLinearScale(d[yValue]))
             .attr('class', 'stateCircle')
-            .attr('r', 12, dy = '.4em')
+            .attr('r', 12)
             .attr('opacity', '0.70')
 
         //     var circlesGroup = chartGroup.selectAll("circle")
-//         .data(incomeData)
-//         .enter()
-//         .append("circle")
-//         .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
-//         .attr("cy", d => yLinearScale(d.Infant_Deaths))
-//         .attr("r", "15")
-//         .attr("fill", "pink")
-//         .attr("opacity", ".5")
+        //         .data(incomeData)
+        //         .enter()
+        //         .append("circle")
+        //         .attr("cx", d => xLinearScale(d.Teen_Birth_Rate))
+        //         .attr("cy", d => yLinearScale(d.Infant_Deaths))
+        //         .attr("r", "15")
+        //         .attr("fill", "pink")
+        //         .attr("opacity", ".5")
         
-        var textGroup = chartGroup.selectAll('.stateText')
+        var textGroup = chartGroup
+            .selectAll('.stateText')
             .data(combinedData)
             .enter()
             .append("text")
@@ -541,7 +557,7 @@ function responsiveWrapper() {
             .attr('value', 'Infant_Death_Rate')
             .attr('dy', '1em')
             .classed('axis-text', true)
-            .classed('active', true)
+            .classed('active', truen )
             .text('Infant Death Rate/1000')
 
         var tidyLabel = yLabelsGp
@@ -624,7 +640,12 @@ function responsiveWrapper() {
                 yValue
             )
 
-            circlesGroup = updateToolTip(xValue, yValue, circlesGroup, textGroup)
+            circlesGroup = updateToolTip(
+                xValue, 
+                yValue, 
+                circlesGroup, 
+                textGroup
+            )
 
             if (xValue === 'Median_Income') {
                 incLabel.classed('active', true).classed('inactive', false)
@@ -674,12 +695,9 @@ function responsiveWrapper() {
 
         yLabelsGp.selectAll('text').on('click', function () {
         var value = d3.select(this).attr('value')
-
         if (value !== yValue) {
             yValue = value
-
             yLinearScale = yScale(combineData, yValue)
-
             yAxis = updateYAxes(yLinearScale, yAxis)
 
             circlesGroup = renderCircles(
@@ -698,7 +716,12 @@ function responsiveWrapper() {
                 yValue
             )
             // Updates Tooltips with New Information
-            circlesGroup = updateToolTip(xValue, yValue, circlesGroup, textGroup)
+            circlesGroup = updateToolTip(
+                xValue, 
+                yValue, 
+                circlesGroup, 
+                textGroup
+            )
 
             if (yValue === 'Infant_Death_Rate') {
                 idryLabel.classed('active', true).classed('inactive', false)
@@ -754,7 +777,7 @@ function responsiveWrapper() {
   })
 };
 responsiveWrapper()
-// d3.select(window).on('resize', makeResponsive)
+d3.select(window).on('resize', makeResponsive)
 
  
 
