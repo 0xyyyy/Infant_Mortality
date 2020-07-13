@@ -754,6 +754,7 @@ function responsiveWrapper() {
   })
 };
 responsiveWrapper()
+console.log("chicken")
 // d3.select(window).on('resize', makeResponsive)
 
  
