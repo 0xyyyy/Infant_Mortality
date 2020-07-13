@@ -1,136 +1,273 @@
-                                                                                                                                                              <!DOCTYPE html>
+  
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
-<link rel="stylesheet" href="../static/style.css" />
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-
-<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-<script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="../static/app.js"></script>
-
-    <title>Median Income</title>
-</head>
-<body>
-  <div class="container">
-  <div class="col-sm-12 col-lg-12">
-    <nav class="navbar navbar-expand-md navbar-dark bg-blanchedalmond">
-      <a class="navbar-brand" href="/"
-        ><img src="../static/images/header_img.png"
-      /></a>
-
-      <!-- <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
-
-      <div
-        class="collapse navbar-collapse justify-content-end"
-        id="navbarNavDropdown"
-      >
-        <ul class="navbar-nav">
-          <!-- <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdownMenuLink"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Mortality Views
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="view1.html">View 1</a>
-              <a class="dropdown-item" href="view2.html">View 2</a>
-            </div>
-          </li> -->
-
-            <li class="nav-item">
-            <a class="nav-link" href="view1.html">Median Income Map<span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="view2.html">Graph</a>
-            </li>
-
-        </ul>
-      </div>
-    </nav>
-  </div>
-
-  <div class="col-sm-12 col-lg-12">
-    <row>
-      <div class="parent">
-        <h3>Median Income Map</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-
-        <div class="child" id="moneymap">
-       
-        </div>
-
-        <div class="twins">
-          <p>
-
-          </p>
-        </div>
-        <div class="twins">
-          <p>
-
-          </p>
-        </div>
-        <div class="red-headed-stepchild">
-          <h5>&#169; hellbilly.datacorp.2020</h5>
-        </div>
-      </div>
-    </row>
-  </div>
-</div>
-
-<script
-  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-  crossorigin="anonymous"
-></script>
-
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-  crossorigin="anonymous"
-></script>
-<script
-  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-  crossorigin="anonymous"
-></script>
- 
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
+  
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+      <link rel="stylesheet" href="../static/style.css" />
+      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+     
+  
+      <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> 
+      <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js'></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      <script src="https://d3js.org/d3.v5.min.js"></script>
+      <script src="../static/app.js"></script>
+  
+  
+      <title>Median Income</title>
+  </head>
+  <body>
     
-
-</body>
-</html>
+  <div class="container">
+      <div class="col-sm-12 col-lg-12">
+  
+          <nav class="navbar navbar-expand-md navbar-dark bg-black">
+            <a class="navbar-brand" href="/"><img src="../static/images/header_img.png"></a>
+  
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+  
+            <div
+              class="collapse navbar-collapse justify-content-end"
+              id="navbarNavDropdown"
+            >
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdownMenuLink"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Mortality Views
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="view1.html">View 1</a>
+                    <a class="dropdown-item" href="view2.html">View 2</a>
+                  </div>
+                </li>
+  
+                <li class="nav-item">
+                  <a class="nav-link" href="view1.html"
+                    >Median Income Map<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="view2.html">Graph</a>
+                </li>
+  
+              </ul>
+            </div>
+          </nav>
+      </div>
+  
+  
+      <div class="col-sm-12 col-lg-12">
+        <row>
+              <div class="parent">
+                <h3>Median Income Map</h3> <p>Lorem ipsum dolor sit amet, 
+                  consectetur adipiscing elit, sed do eiusmod tempor
+                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                  nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                  fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                  culpa qui officia deserunt mollit anim id est laborum.</p>
+              
+                <div class="child" id="map">
+  
+                  <script type="text/javascript" src="STATES.js"></script>
+  
+                  <script type="text/javascript">
+                  
+                  // Add map
+                  var map = L.map('map').setView([37.8, -96], 4);
+  
+                  L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                      maxZoom: 10,
+                      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                      id: 'mapbox/light-v9',
+                      tileSize: 512,
+                      zoomOffset: -1
+                  }).addTo(map);
+  
+  
+                  // Add hover
+                  var info = L.control();
+  
+                  info.onAdd = function (map) {
+                      this._div = L.DomUtil.create('div', 'info');
+                      this.update();
+                      return this._div;
+                  };
+  
+                  info.update = function (props) {
+                      this._div.innerHTML = '<h3><b>Median Income in the USA</h3></b>' +  (props ?
+                          '<b><font size="+1">' + props.name + '</b></font size="+1"><br />' + '$' + props.inc1 + "," + props.inc2
+                          : 'Hover over a state');
+                  };
+  
+                  info.addTo(map);
+  
+  
+                  // Color depending on rate value
+                  function getColor(d) {
+                  return d > 80000 ? '#064724' :
+                          d > 60000  ? '#106D3B' :
+                          d > 40000  ? '#178E4E' :
+                          d > 20000  ? '#39C97B' :
+                          d > 00000  ? '#50FFA1' :
+                                      '#50FFA1' ;
+                  }
+  
+                  function style(feature) {
+                      return {
+                          weight: 2,
+                          opacity: 1,
+                          color: 'white',
+                          dashArray: '3',
+                          fillOpacity: 0.7,
+                          fillColor: getColor(feature.properties.total)
+                      };
+                  }
+  
+                  // Add interaction
+                  function highlightFeature(e) {
+                      var layer = e.target;
+  
+                      layer.setStyle({
+                          weight: 5,
+                          color: '#666',
+                          dashArray: '3',
+                          fillOpacity: 0.7
+                      });
+  
+                      if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                          layer.bringToFront();
+                      }
+  
+                      info.update(layer.feature.properties);
+                  }
+  
+                  var geojson;
+  
+                  function resetHighlight(e) {
+                      geojson.resetStyle(e.target);
+                      info.update();
+                  }
+  
+                  function zoomToFeature(e) {
+                      map.fitBounds(e.target.getBounds());
+                  }
+  
+                  function onEachFeature(feature, layer) {
+                      layer.on({
+                          mouseover: highlightFeature,
+                          mouseout: resetHighlight,
+                          click: zoomToFeature
+                      });
+                  }
+  
+                  geojson = L.geoJson(statesData, {
+                      style: style,
+                      onEachFeature: onEachFeature
+                  }).addTo(map);
+  
+                  </script>
+                </div>
+  
+                <div id="state-legend" class="legend">
+                  <h4><a style="color:black;">Median Income Legend</a></h4>
+                  <div><span style="background-color: #50FFA1"></span><a style="color:black;">$0-20,000</a></div>
+                  <div><span style="background-color: #39C97B"></span><a style="color:black;">$20,000-40,000</a></div>
+                  <div><span style="background-color: #178E4E"></span><a style="color:black;">$40,000-60,000</a></div>
+                  <div><span style="background-color: #106D3B"></span><a style="color:black;">$60,000-80,000</a></div>
+                  <div><span style="background-color: #064724"></span><a style="color:black;">$80,000-100,000</a></div>
+  
+                  <style>
+                      .legend {
+                      background-color: blanchedalmond;
+                      border-radius: 3px;
+                      bottom: 30px;
+                      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+                      padding: 10px;
+                      position: bottom;
+                      right: 10px;
+                      z-index: 1;
+                      }
+                      
+                      .legend h4 {
+                      margin: 0 0 10px;
+                      }
+                      
+                      .legend div span {
+                      border-radius: 50%;
+                      display: inline-block;
+                      height: 10px;
+                      margin-right: 5px;
+                      width: 10px;
+                      }
+                  </style>
+                </div>
+  
+                <div class="twins">
+                  <p>
+  
+                  </p>
+                </div>
+                <div class="twins">
+                  <p>
+  
+                  </p>
+                </div>
+                <div class="red-headed-stepchild">
+                  <h5>&#169; hellbilly.datacorp.2020</h5>
+                </div>
+              </div>
+        </row>
+      </div>
+  </div>
+  
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  ></script>
+  
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"
+  ></script>
+  
+  
+  
+  </body>
+  </html>
