@@ -115,12 +115,12 @@
   
                   // Color depending on rate value
                   function getColor(d) {
-                  return d > 80000 ? '#064724' :
-                          d > 60000  ? '#106D3B' :
+                  return d > 80000 ? '#50FFA1' :
+                          d > 60000  ? '#39C97B' :
                           d > 40000  ? '#178E4E' :
-                          d > 20000  ? '#39C97B' :
-                          d > 00000  ? '#50FFA1' :
-                                      '#50FFA1' ;
+                          d > 20000  ? '#106D3B' :
+                          d > 00000  ? '#064724' :
+                                      '#064724' ;
                   }
   
                   function style(feature) {
@@ -181,11 +181,11 @@
   
                 <div id="state-legend" class="legend">
                   <h4><a style="color:black;">Median Income Legend</a></h4>
-                  <div><span style="background-color: #50FFA1"></span><a style="color:black;">$0-20,000</a></div>
-                  <div><span style="background-color: #39C97B"></span><a style="color:black;">$20,000-40,000</a></div>
+                  <div><span style="background-color: #064724"></span><a style="color:black;">$0-20,000</a></div>
+                  <div><span style="background-color: #106D3B"></span><a style="color:black;">$20,000-40,000</a></div>
                   <div><span style="background-color: #178E4E"></span><a style="color:black;">$40,000-60,000</a></div>
-                  <div><span style="background-color: #106D3B"></span><a style="color:black;">$60,000-80,000</a></div>
-                  <div><span style="background-color: #064724"></span><a style="color:black;">$80,000-100,000</a></div>
+                  <div><span style="background-color: #39C97B"></span><a style="color:black;">$60,000-80,000</a></div>
+                  <div><span style="background-color: #50FFA1"></span><a style="color:black;">$80,000-100,000</a></div>
   
                   <style>
                       .legend {
