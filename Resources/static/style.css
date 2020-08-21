@@ -9,25 +9,41 @@ body {
 
 .parent {
   width: 100%;
-  border: 0px solid grey;
+  border: 0px solid  rgb(78, 47, 47);
   float: left;
-  padding: 6px;
+  padding: 12px;
   background: blanchedalmond
 }
 
 .child {
   width: 100%;
   padding: 0%;
-  border: 1px solid grey;
+  border: 1px solid  rgb(78, 47, 47);
   margin: 0.2em auto;
 }
 
 .twins {
-  width: 50%;
+  width: 100%;
   padding: 1em;
-  border: 1px solid grey;
+  border: 1px solid rgb(78, 47, 47);
   float: left;
 }
+
+.twins {
+  line-height: .5rem;
+}
+
+.twins a {
+  color:  rgb(78, 47, 47);
+}
+
+.twin2 {
+  width: 100%;
+  padding: 1em;
+  border: 1px solid rgb(78, 47, 47);
+  float: left;
+}
+
 
 .red-headed-stepchild {
   width: 98%;
@@ -49,7 +65,7 @@ h5 {
 }
 
 p {
-    font-size: small;
+    font-size: medium;
     color: rgb(78, 47, 47);
 }
 
@@ -75,7 +91,18 @@ p {
 
 button {
   width: 100px;
+  
 }
+
+.nav-item {
+  transition-duration: 0.4s;
+}
+
+.nav-item:hover {
+  background-color: rosybrown; 
+  /* color: indianred; */
+}
+
 
 nav .navbar-nav li a {
   color: rgb(78, 47, 47) !important;
@@ -84,5 +111,9 @@ nav .navbar-nav li a {
 
 .navbar {
   background: blanchedalmond;
+}
+
+a {
+ text-shadow: 2px 2px 3px blanchedalmond;
 }
 

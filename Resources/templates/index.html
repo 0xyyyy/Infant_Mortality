@@ -51,31 +51,16 @@
             id="navbarNavDropdown"
           >
             <ul class="navbar-nav">
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdownMenuLink"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Mortality Views
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="view1.html">View 1</a>
-                  <a class="dropdown-item" href="view2.html">View 2</a>
-                </div>
-              </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="view1.html"
-                  >Median Income Map<span class="sr-only"></span></a>
+                <a class="nav-link" href="/">IM Map<span class="sr-only"></span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="view2.html">Graph</a>
+                <a class="nav-link" href="view1.html"
+                  >Med. Income Map<span class="sr-only"></span
+                ></a>
               </li>
+              <li class="nav-item"><a class="nav-link" href="view2.html">IM Chart</a></li>
 
             </ul>
           </div>
@@ -86,15 +71,13 @@
     <div class="col-sm-12 col-lg-12">
       <row>
             <div class="parent">
-              <h3>Infant Mortality Map</h3> <p>Lorem ipsum dolor sit amet, 
-                consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                culpa qui officia deserunt mollit anim id est laborum.</p>
-            
-              <div class="child" id="map">
+              <h3>Infant Mortality Map</h3> <p>This map shows the overall mortality rate per state, represented by the shade of
+                red. The darker red, the higher rate per 1000 births. If you hover over each
+                state, individual stats will show up regarding the number of births recorded for
+                teens, low birth weight, and unmarried mothers.
+                </p>
+                            
+                              <div class="child" id="map">
 
                 <script type="text/javascript" src="../static/STATES.js"></script>
 
@@ -137,17 +120,12 @@
 
                 // Color depending on rate value
                 function getColor(d) {
-                    return d > 9 ? '#870000' :
-                            d > 8  ? '#A10505' :
-                            d > 7  ? '#B81414' :
+                    return d > 8 ? '#630303' :
                             d > 6  ? '#CF2525' :
-                            d > 5  ? '#E83333' :
-                            d > 4  ? '#F53E3E' :
-                            d > 3  ? '#F5543E' :
-                            d > 2  ? '#FF6954' :
-                            d > 1  ? '#FF7C6A' :
-                            d > 0  ? '#FF9687' :
-                                    '#FF9687' ;
+                            d > 4  ? '#FF6954' :
+                            d > 2  ? '#FF9687' :
+                            d > 0  ? '#FFCFC4' :
+                                    '#FFCFC4' ;
                 }
 
                 function style(feature) {
@@ -208,16 +186,11 @@
 
               <div id="state-legend" class="legend">
                 <h4><a style="color:black;">Infant Mortality Rate Legend</a></h4>
-                <div><span style="background-color: #FF9687"></span><a style="color:black;">0-1</a></div>
-                <div><span style="background-color: #FF7C6A"></span><a style="color:black;">1-2</a></div>
-                <div><span style="background-color: #FF6954"></span><a style="color:black;">2-3</a></div>
-                <div><span style="background-color: #F5543E"></span><a style="color:black;">3-4</a></div>
-                <div><span style="background-color: #F53E3E"></span><a style="color:black;">4-5</a></div>
-                <div><span style="background-color: #E83333"></span><a style="color:black;">5-6</a></div>
-                <div><span style="background-color: #CF2525"></span><a style="color:black;">6-7</a></div>
-                <div><span style="background-color: #B81414"></span><a style="color:black;">7-8</a></div>
-                <div><span style="background-color: #A10505"></span><a style="color:black;">8-9</a></div>
-                <div><span style="background-color: #870000"></span><a style="color:black;">9-10</a></div>
+                <div><span style="background-color: #FFCFC4"></span><a style="color:black;">0-2</a></div>
+                <div><span style="background-color: #FF9687"></span><a style="color:black;">2-4</a></div>
+                <div><span style="background-color: #FF6954"></span><a style="color:black;">4-6</a></div>
+                <div><span style="background-color: #CF2525"></span><a style="color:black;">6-8</a></div>
+                <div><span style="background-color: #630303"></span><a style="color:black;">8-10</a></div>
 
                 <style>
                     .legend {
@@ -247,21 +220,16 @@
               </div>
 
               <div class="twins">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.</p>
+                <h3>Sources Links</h3>
+                <p><a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-households.html">Income Data from the US Census Bureau</a></p>
+                <p><a href="https://datacenter.kidscount.org/data/tables/6051-infant-mortality?loc=1&loct=1#detailed/1/any/false/37,871,870,573,869,36,868,867,133,38/any/12718,12719">Infant Mortality Rate by State from kidscount.com</a></p>
+                <p><a href="https://www.cdc.gov/nchs/pressroom/sosmap/infant_mortality_rates/infant_mortality.htm">Infant Mortality Rate by State from the CDC</a></p>
+                <p><a href="https://www.cdc.gov/nchs/pressroom/sosmap/lbw_births/lbw.htm">Low Birthweight Rate by State from the CDC</a></p>
+                <p><a href="https://www.cdc.gov/nchs/pressroom/sosmap/teen-births/teenbirths.htm">Teen Birth Rate by State from the CDC</a></p>
+                <p><a href="https://www.cdc.gov/nchs/pressroom/sosmap/unmarried/unmarried.htm">Birth Rate to Unmarried Mothers by State from the CDC</a></p>
               </div>
-              <div class="twins">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-                    in culpa qui officia deserunt mollit anim id est laborum.</p>
-              </div>
+           
+              
               <div class="red-headed-stepchild"><h5>&#169; hellbilly.datacorp.2020</h5></div>
             </div>
       </row>
