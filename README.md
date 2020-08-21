@@ -1,5 +1,22 @@
 # Infant_Mortality
 
+### Homepage:
+
+![home](/README_images/homepage.PNG)
+
+### Median Income:
+
+![median income](/README_images/median_income.PNG)
+
+### Scatter: 
+
+![graph](/README_images/graph.PNG)
+
+
+
+
+
+
 Project Proposal 
 
 Overview:
